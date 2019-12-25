@@ -1,23 +1,6 @@
-include <sg90.scad>
-
-servo_holder_gap_bottom = 0;
-servo_holder_gap_side= 0.4;
-servo_holder_wall_size_bottom = 3;
-servo_holder_wall_size_side = 1;
-servo_holder_hole_extra = 2;
-servo_holder_mount_hole_d = 2;
-servo_holder_cable_slit_w = 8.5;
-servo_holder_cable_slit_hmin = 2;
-servo_holder_wall_h = 8;
-servo_holder_cable_extra_room = 2;
-servo_holder_cable_extra_room_r = 15;
-
-shaft_d = 5;
-shaft_h = 4;
-shaft_base1_l = 10;
-shaft_base1_h = servo_holder_wall_size_bottom / 2;
-shaft_base2_d = 8;
-shaft_base2_h = servo_holder_wall_size_bottom / 2;
+include <include_sg90.scad>
+include <include_constants.scad>
+use <obiscad/bevel.scad>
 
 servo_holder_pillar_l = sg90_ledge_l_from_body - servo_holder_gap_side;
 servo_holder_w = sg90_main_w + servo_holder_gap_side * 2 + servo_holder_wall_size_side * 2;
@@ -25,9 +8,6 @@ servo_holder_l = sg90_main_l + servo_holder_gap_side * 2 + servo_holder_pillar_l
 servo_holder_base_h = servo_holder_wall_size_bottom;
 servo_holder_axis_x = -servo_holder_w / 2;
 servo_holder_axis_y = -(sg90_main_l - sg90_main_l)/2 - sg90_tower_d/2 - servo_holder_gap_side - servo_holder_pillar_l;
-
-
-servo_holder();
 
 
 module servo_holder()
@@ -59,7 +39,7 @@ module servo_holder()
 		translate([-shaft_base1_l / 2, -shaft_base1_l / 2, -servo_holder_gap_bottom - shaft_base1_h])
 			cube([shaft_base1_l, shaft_base1_l, shaft_base1_h+0.1]);
 		translate([0, 0, -servo_holder_gap_bottom - shaft_base1_h - shaft_base2_h - 0.1])
-			cylinder(d=shaft_base2_d, h=shaft_base2_h+0.1+0.1);
+			cylinder(d=shaft_base2_d, h=shaft_base2_h+0.1+0.1, $fa = shaft_fa, $fs = shaft_fs);
 	}
 	
 	%SG90();
@@ -75,7 +55,7 @@ module servo_pillar(with_cable_slit=false)
 	{
 		translate([-w/2,0,0])
 		{
-			cube([w, servo_holder_pillar_l, h]);
+			cube([w, servo_holder_pillar_l, h]);	
 		}
 		
 		#translate([0, sg90_mount_hole_offset_y_from_axis - servo_holder_axis_y, h - hole_h])
