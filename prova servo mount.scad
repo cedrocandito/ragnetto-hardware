@@ -1,37 +1,68 @@
 include <sg90.scad>
 
-servo_holder_gap = 0.5;
-servo_holder_wall_size = 2;
+servo_holder_gap_bottom = 0;
+servo_holder_gap_side= 0.4;
+servo_holder_wall_size_bottom = 3;
+servo_holder_wall_size_side = 3;
 
+shaft_d = 5;
+shaft_h = 4;
+shaft_base1_l = 10;
+shaft_base1_h = servo_holder_wall_size_bottom / 2;
+shaft_base2_d = 8;
+shaft_base2_h = servo_holder_wall_size_bottom / 2;
 
-servo_holder_w = sg90_main_w + servo_holder_gap * 2 + servo_holder_wall_size * 2;
-servo_holder_l = sg90_ledge_l + servo_holder_gap * 2 + servo_holder_wall_size * 2;
-servo_holder_base_h = servo_holder_wall_size;
+servo_holder_w = sg90_main_w + servo_holder_gap_side * 2 + servo_holder_wall_size_side * 2;
+servo_holder_l = sg90_ledge_l + servo_holder_gap_side * 2 + servo_holder_wall_size_side * 2;
+servo_holder_base_h = servo_holder_wall_size_bottom;
 servo_holder_axis_x = -servo_holder_w / 2;
-servo_holder_axis_y = -(sg90_ledge_l - sg90_main_l)/2 - sg90_tower_d/2 - servo_holder_gap - servo_holder_wall_size;
+servo_holder_axis_y = -(sg90_ledge_l - sg90_main_l)/2 - sg90_tower_d/2 - servo_holder_gap_side - servo_holder_wall_size_side;
 servo_holder_hole_extra = 2;
+servo_holder_mount_hole_d = 2;
 
 
-translate([servo_holder_axis_x, servo_holder_axis_y, -servo_holder_wall_size - servo_holder_gap])
-	cube([servo_holder_w, servo_holder_l, servo_holder_base_h]);
+servo_holder();
 
-translate([0,servo_holder_axis_y,-servo_holder_gap])
-	servo_pillar();
-translate([0,servo_holder_axis_y + servo_holder_l,-servo_holder_gap])
-	rotate([0, 0, 180])
-		servo_pillar();
 
-%SG90();
+module servo_holder()
+{
+	$fa = 1;
+	$fs = 0.15;
+	
+	difference()
+	{
+		union()
+		{
+			// base
+			translate([servo_holder_axis_x, servo_holder_axis_y, -servo_holder_wall_size_bottom - servo_holder_gap_bottom])
+				cube([servo_holder_w, servo_holder_l, servo_holder_base_h]);
+
+			// pillars
+			translate([0,servo_holder_axis_y,-servo_holder_gap_bottom])
+				servo_pillar();
+			translate([0,servo_holder_axis_y + servo_holder_l,-servo_holder_gap_bottom])
+				rotate([0, 0, 180])
+					servo_pillar();
+		}
+
+		// bottom shaft hole
+		translate([-shaft_base1_l / 2, -shaft_base1_l / 2, -servo_holder_gap_bottom - shaft_base1_h])
+			cube([shaft_base1_l, shaft_base1_l, shaft_base1_h+0.1]);
+		translate([0, 0, -servo_holder_gap_bottom - shaft_base1_h - shaft_base2_h - 0.1])
+			cylinder(d=shaft_base2_d, h=shaft_base2_h+0.1+0.1);
+	}
+	
+	%SG90();
+}
 
 module servo_pillar()
 {
-	l = (sg90_ledge_l - sg90_main_l) / 2;
 	w = servo_holder_w;
 	ledge_l = (sg90_ledge_l - sg90_main_l) / 2;
 	hole_h = sg90_mount_screw_h  - sg90_ledge_h + servo_holder_hole_extra;
 	
-	h = sg90_ledge_z + servo_holder_gap;
-	h1 = sg90_cable_z + sg90_cable_h + servo_holder_gap;
+	h = sg90_ledge_z + servo_holder_gap_bottom;
+	h1 = sg90_cable_z + sg90_cable_h + servo_holder_gap_bottom;
 	h3 = hole_h;
 	h2 = h - h1 - h3;
 
@@ -45,10 +76,10 @@ module servo_pillar()
 				{
 					polygon([
 						[0, 0],
-						[servo_holder_wall_size, 0],
-						[servo_holder_wall_size, h1],
-						[servo_holder_wall_size + ledge_l, h1 + h2],
-						[servo_holder_wall_size + ledge_l, h1 + h2 + h3],
+						[servo_holder_wall_size_side, 0],
+						[servo_holder_wall_size_side, h1],
+						[servo_holder_wall_size_side + ledge_l, h1 + h2],
+						[servo_holder_wall_size_side + ledge_l, h1 + h2 + h3],
 						[0, h1 + h2 + h3],
 					]);
 				}
@@ -56,7 +87,7 @@ module servo_pillar()
 		}
 		
 		#translate([0, sg90_mount_hole_offset_y_from_axis - servo_holder_axis_y, h - hole_h])
-			cylinder(d = sg90_mount_hole_d * 0.7, h = hole_h+0.1, $fa=5, $fs=0.1);
+			cylinder(d = servo_holder_mount_hole_d, h = hole_h+0.1, $fa=5, $fs=0.1);
 		
 	}
 }
