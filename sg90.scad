@@ -21,16 +21,17 @@ sg90_cable_h = 1;
 sg90_cable_l = 2;
 sg90_mount_screw_h = 9;
 
-sg90_mount_hole_offset_y = (sg90_mount_hole_dist - sg90_main_l) / 2;
-sg90_body_offset_x = -sg90_main_w/2;
-sg90_body_offset_y = -sg90_tower_d/2;
-sg90_ledge_from_body_y = (sg90_ledge_l  - sg90_main_l) / 2;
+sg90_body_offset_x_from_axis = -sg90_main_w/2;
+sg90_body_offset_y_from_axis = -sg90_tower_d/2;
+sg90_mount_hole_offset_y_from_body = -(sg90_mount_hole_dist - sg90_main_l) / 2;
+sg90_mount_hole_offset_y_from_axis = sg90_mount_hole_offset_y_from_body + sg90_body_offset_y_from_axis;
+sg90_ledge_l_from_body = (sg90_ledge_l  - sg90_main_l) / 2;
 
 module SG90()
 {
 	$fa=3; $fs=0.5;
 	
-	translate([sg90_body_offset_x, sg90_body_offset_y, 0])
+	translate([sg90_body_offset_x_from_axis, sg90_body_offset_y_from_axis, 0])
 	{
 		difference()
 		{
@@ -39,7 +40,7 @@ module SG90()
 				// main body
 				cube([sg90_main_w, sg90_main_l, sg90_main_h]);
 				// mount "ledge"
-				translate([0,-sg90_ledge_from_body_y,sg90_ledge_z])
+				translate([0,-sg90_ledge_l_from_body,sg90_ledge_z])
 					cube([sg90_main_w, sg90_ledge_l, sg90_ledge_h]);
 				// round tower
 				translate([sg90_main_w/2, sg90_tower_d/2, sg90_main_h]) 
@@ -56,9 +57,9 @@ module SG90()
 			}
 			
 			// mount holes
-			translate([sg90_main_w/2, -sg90_mount_hole_offset_y, sg90_ledge_z - 1])
+			translate([sg90_main_w/2, sg90_mount_hole_offset_y_from_body, sg90_ledge_z - 1])
 				cylinder(d = sg90_mount_hole_d, h = sg90_ledge_h + 2);
-			translate([sg90_main_w/2, sg90_main_l + sg90_mount_hole_offset_y, sg90_ledge_z - 1])
+			translate([sg90_main_w/2, sg90_main_l - sg90_mount_hole_offset_y_from_body, sg90_ledge_z - 1])
 				cylinder(d = sg90_mount_hole_d, h = sg90_ledge_h + 2);
 			// shaft hole
 			translate([sg90_main_w/2, sg90_tower_d/2, sg90_main_h + sg90_tower_h]) 
