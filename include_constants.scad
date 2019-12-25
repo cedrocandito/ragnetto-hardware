@@ -4,11 +4,9 @@ servo_holder_wall_size_bottom = 3;
 servo_holder_wall_size_side = 1;
 servo_holder_hole_extra = 2;
 servo_holder_mount_hole_d = 2;
-servo_holder_cable_slit_w = 8.5;
-servo_holder_cable_slit_hmin = 2;
 servo_holder_wall_h = 10;
-servo_holder_cable_extra_room = 2;
-servo_holder_cable_extra_room_r = 15;
+servo_holder_cable_extra_room = 2.5;
+servo_holder_cable_extra_room_r = 10;
 
 servo_arm_bracket_size = 3;
 servo_arm_extra_dist = 1;
