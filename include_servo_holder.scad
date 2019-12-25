@@ -1,5 +1,6 @@
 include <include_sg90.scad>
 include <include_constants.scad>
+include <include_servo_horn.scad>
 use <obiscad/bevel.scad>
 
 servo_holder_pillar_l = sg90_ledge_l_from_body - servo_holder_gap_side;
@@ -71,6 +72,47 @@ module servo_holder(with_bevel = false)
 	
 	%SG90();
 }
+
+
+module joint_arm()
+{
+	$fa = 1;
+	$fs = 0.3;
+	
+	w = servo_holder_w;
+	in_h = shaft_base2_extra_gap + servo_holder_wall_size_bottom + servo_holder_gap_bottom + sg90_main_h + sg90_tower_h;
+	out_h = in_h + servo_arm_thickness * 2;
+	bracket_dist = sqrt(servo_holder_axis_y * servo_holder_axis_y + servo_holder_axis_x * servo_holder_axis_x) + servo_arm_extra_dist;
+	l = bracket_dist + servo_arm_bracket_size + w/2;
+	square_l = l - w / 2;
+	
+	translate([0,0,-servo_holder_gap_bottom - servo_holder_wall_size_bottom - shaft_base2_extra_gap - servo_arm_thickness])
+	{
+		union()
+		{
+			// bottom arm
+			translate([-w/2, -square_l, 0])
+				cube([w, square_l, servo_arm_thickness]);
+			cylinder(d = w, h = servo_arm_thickness);
+			
+			// bracket
+			translate([-w/2, -square_l, 0])
+				cube([w, servo_arm_bracket_size, out_h]);
+				
+			// top arm
+			translate([0,0,in_h + servo_arm_thickness])
+			{
+				translate([-w/2, -square_l, 0])
+					cube([w, square_l, servo_arm_thickness]);
+				cylinder(d = w, h = servo_arm_thickness);
+			}
+		}
+	}
+	
+}
+
+
+// ----------------------------------------------------------------------------------------
 
 module servo_pillar(with_cable_slit=false)
 {

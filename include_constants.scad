@@ -10,13 +10,17 @@ servo_holder_wall_h = 10;
 servo_holder_cable_extra_room = 2;
 servo_holder_cable_extra_room_r = 15;
 
+servo_arm_bracket_size = 3;
+servo_arm_extra_dist = 1;
+servo_arm_thickness = 3;
+
 shaft_d = 5;
 shaft_h = 4;
 shaft_base1_l = 10;
 shaft_base1_h = servo_holder_wall_size_bottom / 2;
 shaft_base2_d = 8;
 shaft_base2_h = servo_holder_wall_size_bottom / 2;
-shaft_base2_extra_gap = 0.6;
+shaft_base2_extra_gap = 0.6;	// (to act like a washer)
 shaft_fa = 1;
 shaft_fs = 0.1;
 
