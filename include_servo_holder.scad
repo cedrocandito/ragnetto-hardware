@@ -10,7 +10,7 @@ servo_holder_axis_x = -servo_holder_w / 2;
 servo_holder_axis_y = -(sg90_main_l - sg90_main_l)/2 - sg90_tower_d/2 - servo_holder_gap_side - servo_holder_pillar_l;
 
 
-module servo_holder()
+module servo_holder(with_bevel = false)
 {
 	$fa = 1;
 	$fs = 0.15;
@@ -40,6 +40,33 @@ module servo_holder()
 			cube([shaft_base1_l, shaft_base1_l, shaft_base1_h+0.1]);
 		translate([0, 0, -servo_holder_gap_bottom - shaft_base1_h - shaft_base2_h - 0.1])
 			cylinder(d=shaft_base2_d, h=shaft_base2_h+0.1+0.1, $fa = shaft_fa, $fs = shaft_fs);
+		
+		// bevel edges
+		if (with_bevel)
+		{
+			translate([servo_holder_axis_x, servo_holder_axis_y, -servo_holder_base_h])
+			{
+				bevel_h = sg90_ledge_z + servo_holder_gap_bottom + servo_holder_base_h;
+				
+				// left front
+				simple_bevel([0,0,bevel_h/2], [0,0,1], [-1,-1,0], bevel_h);
+				// right front
+				simple_bevel([servo_holder_w,0,bevel_h/2], [0,0,1], [1,-1,0], bevel_h);
+				// left back
+				simple_bevel([0,servo_holder_l,bevel_h/2], [0,0,1], [-1,1,0], bevel_h);
+				// right back
+				simple_bevel([servo_holder_w,servo_holder_l,bevel_h/2], [0,0,1], [1,1,0], bevel_h);
+				
+				// bottom front
+				simple_bevel([servo_holder_w/2,0,0], [1,0,0], [0,-1,-1], servo_holder_w);
+				// bottom back
+				simple_bevel([servo_holder_w/2,servo_holder_l,0], [1,0,0], [0,1,-1], servo_holder_w);
+				// bottom left
+				simple_bevel([0,servo_holder_l/2,0], [0,1,0], [-1,0,-1], servo_holder_l);
+				// bottom right
+				simple_bevel([servo_holder_w,servo_holder_l/2,0], [0,1,0], [1,0,-1], servo_holder_l);
+			}
+		}
 	}
 	
 	%SG90();

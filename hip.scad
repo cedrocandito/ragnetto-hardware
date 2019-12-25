@@ -1,3 +1,3 @@
 include <include_servo_holder.scad>
 
-servo_holder();
+servo_holder(true);
