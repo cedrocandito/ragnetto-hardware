@@ -1,6 +1,7 @@
 include <include_constants.scad>
 
-shaft_gap = 0.2;
+// 0.2 when fast, 0.1 when slow and precise
+shaft_gap = 0.1;
 
 shaft();
 

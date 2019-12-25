@@ -12,23 +12,26 @@ module servo_arm_2d(gap)
 	$fs = 0.1;
 	$fa = 1;
 	
-	offset(delta=gap)
+	rotate([0,0,-90])
 	{
-		union()
+		offset(delta=gap)
 		{
-			circle(d=servo_horn_hub_d);
-			polygon([
-				[0,-servo_horn_arm_w_max/2],
-				[arm_l,-arm_tip_r],
-				[arm_l,arm_tip_r],
-				[0,servo_horn_arm_w_max/2]
-			]);
-			translate([arm_l,0]) circle(d=servo_horn_arm_w_min);
+			union()
+			{
+				circle(d=servo_horn_hub_d);
+				polygon([
+					[0,-servo_horn_arm_w_max/2],
+					[arm_l,-arm_tip_r],
+					[arm_l,arm_tip_r],
+					[0,servo_horn_arm_w_max/2]
+				]);
+				translate([arm_l,0]) circle(d=servo_horn_arm_w_min);
+			}
 		}
 	}
 }
 
-module servo_arm_3d(height, gap)
+module servo_arm(height=1.35, gap=0.2)
 {
 	linear_extrude(height=height)
 		servo_arm_2d(gap);

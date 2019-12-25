@@ -38,9 +38,9 @@ module servo_holder(with_bevel = false)
 
 		// bottom shaft hole
 		translate([-shaft_base1_l / 2, -shaft_base1_l / 2, -servo_holder_gap_bottom - shaft_base1_h])
-			cube([shaft_base1_l, shaft_base1_l, shaft_base1_h+0.1]);
-		translate([0, 0, -servo_holder_gap_bottom - shaft_base1_h - shaft_base2_h - 0.1])
-			cylinder(d=shaft_base2_d, h=shaft_base2_h+0.1+0.1, $fa = shaft_fa, $fs = shaft_fs);
+			cube([shaft_base1_l, shaft_base1_l, shaft_base1_h + 0.01]);
+		translate([0, 0, -servo_holder_gap_bottom - shaft_base1_h - shaft_base2_h - 0.01])
+			cylinder(d=shaft_base2_d, h=shaft_base2_h + 0.01 + 0.01, $fa = shaft_fa, $fs = shaft_fs);
 		
 		// bevel edges
 		if (with_bevel)
@@ -77,38 +77,62 @@ module servo_holder(with_bevel = false)
 module joint_arm()
 {
 	$fa = 1;
-	$fs = 0.3;
+	$fs = 0.2;
 	
 	w = servo_holder_w;
-	in_h = shaft_base2_extra_gap + servo_holder_wall_size_bottom + servo_holder_gap_bottom + sg90_main_h + sg90_tower_h;
+	in_h = shaft_base2_extra_gap + servo_holder_wall_size_bottom + servo_holder_gap_bottom + sg90_main_h + sg90_tower_h + sg90_hub_with_horn_h - servo_arm_thickness;
 	out_h = in_h + servo_arm_thickness * 2;
 	bracket_dist = sqrt(servo_holder_axis_y * servo_holder_axis_y + servo_holder_axis_x * servo_holder_axis_x) + servo_arm_extra_dist;
 	l = bracket_dist + servo_arm_bracket_size + w/2;
 	square_l = l - w / 2;
+	shaft_hole_gap = 0.5;
+	top_arm_passage_width = sg90_hub_d + 1;
 	
 	translate([0,0,-servo_holder_gap_bottom - servo_holder_wall_size_bottom - shaft_base2_extra_gap - servo_arm_thickness])
 	{
-		union()
+		difference()
 		{
-			// bottom arm
-			translate([-w/2, -square_l, 0])
-				cube([w, square_l, servo_arm_thickness]);
-			cylinder(d = w, h = servo_arm_thickness);
-			
-			// bracket
-			translate([-w/2, -square_l, 0])
-				cube([w, servo_arm_bracket_size, out_h]);
-				
-			// top arm
-			translate([0,0,in_h + servo_arm_thickness])
+			union()
 			{
+				// bottom arm
 				translate([-w/2, -square_l, 0])
 					cube([w, square_l, servo_arm_thickness]);
 				cylinder(d = w, h = servo_arm_thickness);
+				
+				// bracket
+				translate([-w/2, -square_l, 0])
+					cube([w, servo_arm_bracket_size, out_h]);
+					
+				// top arm
+				translate([0,0,in_h + servo_arm_thickness])
+				{
+					translate([-w/2, -square_l, 0])
+						cube([w, square_l, servo_arm_thickness]);
+					cylinder(d = w, h = servo_arm_thickness);
+				}
 			}
+			
+			// horn
+			translate([0,0,out_h - sg90_horn_h])
+			{
+				servo_arm(sg90_horn_h + 0.01, servo_horn_rim);	
+			}
+			
+			// horn hub
+			translate([0,0,out_h - servo_arm_thickness - 0.01])
+			{
+				cylinder(d = servo_horn_hub_d + servo_horn_rim * 2, h = servo_arm_thickness + 0.01);
+			}
+			
+			// passage for servo shaft in top arm
+			translate([-w/2 - 0.01, -top_arm_passage_width/2, out_h - servo_arm_thickness - 0.01])
+				cube([w/2, top_arm_passage_width, servo_arm_thickness + 0.01 + 0.01]);
+			
+			// bottom shaft hole
+			translate([0, 0, servo_arm_thickness - shaft_h - shaft_hole_extra_h])
+				cylinder(d=shaft_d, h=shaft_h +shaft_hole_extra_h + 0.01, $fa = shaft_fa, $fs = shaft_fs);
 		}
 	}
-	
 }
 
 
@@ -129,17 +153,17 @@ module servo_pillar(with_cable_slit=false)
 		
 		// screw hole
 		translate([0, sg90_mount_hole_offset_y_from_axis - servo_holder_axis_y, h - hole_h])
-			cylinder(d = servo_holder_mount_hole_d, h = hole_h+0.1, $fa=5, $fs=0.1);
+			cylinder(d = servo_holder_mount_hole_d, h = hole_h + 0.01, $fa=5, $fs=0.1);
 		
 		if (with_cable_slit)
 		{
 			translate([0, servo_holder_pillar_l + servo_holder_cable_extra_room_r, 0])
 			{
-				rotate([0, 90, 0])
+				translate([-sg90_cable_w, 0, 0])
 				{
-					translate([0, 0, -w/4])
+					rotate([0, 90, 0])
 					{
-						cylinder(r=servo_holder_cable_extra_room_r + servo_holder_cable_extra_room, h=w*3/4 + 0.1);
+						cylinder(r=servo_holder_cable_extra_room_r + servo_holder_cable_extra_room, h=w/2 + sg90_cable_w + 0.01);
 					}
 				}
 			}
