@@ -80,20 +80,23 @@ module joint_arm()
 	$fs = 0.2;
 	
 	w = servo_holder_w;
-	in_h = shaft_base2_extra_gap + servo_holder_wall_size_bottom + servo_holder_gap_bottom + sg90_main_h + sg90_tower_h + sg90_hub_with_horn_h - servo_arm_thickness;
+	in_h = shaft_base2_extra_h + servo_holder_wall_size_bottom + servo_holder_gap_bottom + sg90_main_h + sg90_tower_h + sg90_hub_with_horn_h - servo_arm_thickness;
 	out_h = in_h + servo_arm_thickness * 2;
 	bracket_dist = sqrt(servo_holder_axis_y * servo_holder_axis_y + servo_holder_axis_x * servo_holder_axis_x) + servo_arm_extra_dist;
 	l = bracket_dist + servo_arm_bracket_size + w/2;
 	square_l = l - w / 2;
 	shaft_hole_gap = 0.5;
-	top_arm_passage_width = sg90_hub_d + 1;
+	top_arm_passage_width = sg90_hub_d + servo_arm_passage_extra_w;
+	ring_h = sg90_hub_with_horn_h - servo_arm_thickness;
 	
-	translate([0,0,-servo_holder_gap_bottom - servo_holder_wall_size_bottom - shaft_base2_extra_gap - servo_arm_thickness])
+	translate([0,0,-servo_holder_gap_bottom - servo_holder_wall_size_bottom - shaft_base2_extra_h - servo_arm_thickness])
 	{
 		difference()
 		{
 			union()
 			{
+				// here origin is at base level, at shaft axis
+			
 				// bottom arm
 				translate([-w/2, -square_l, 0])
 					cube([w, square_l, servo_arm_thickness]);
@@ -110,6 +113,16 @@ module joint_arm()
 						cube([w, square_l, servo_arm_thickness]);
 					cylinder(d = w, h = servo_arm_thickness);
 				}
+				
+				// top arm shaft ring
+				translate([0, 0, in_h + servo_arm_thickness - ring_h])
+				{
+					difference()
+					{
+						cylinder(d=servo_horn_hub_d + servo_horn_rim * 2 + servo_arm_servo_shaft_ring_thickness * 2, h=ring_h);
+						cylinder(d=servo_horn_hub_d + servo_horn_rim * 2 , h=ring_h);						
+					}
+				}
 			}
 			
 			// horn
@@ -125,8 +138,8 @@ module joint_arm()
 			}
 			
 			// passage for servo shaft in top arm
-			translate([-w/2 - 0.01, -top_arm_passage_width/2, out_h - servo_arm_thickness - 0.01])
-				cube([w/2, top_arm_passage_width, servo_arm_thickness + 0.01 + 0.01]);
+			translate([-w/2 - 0.01, -top_arm_passage_width/2, out_h - servo_arm_thickness - ring_h - 0.01])
+				cube([w/2, top_arm_passage_width, servo_arm_thickness + ring_h + 0.01 + 0.01]);
 			
 			// bottom shaft hole
 			translate([0, 0, servo_arm_thickness - shaft_h - shaft_hole_extra_h])
