@@ -14,8 +14,8 @@ servo_arm_bracket_size = 4;
 servo_arm_extra_dist = 3;	// 0 is the minimal non-touching distance
 servo_arm_thickness = 3.5;
 servo_arm_servo_shaft_ring_thickness = 2;
-servo_arm_servo_shaft_ring_gap = 0.5;	// to allow better movement
-servo_arm_passage_angle = 90;
+servo_arm_servo_shaft_ring_gap = 0.6;	// to allow better movement
+servo_arm_passage_angle = 30;
 servo_arm_passage_extra_w = 0.5; // 0 is exactly the size of the servo shaft
 servo_horn_rim = 0.2;
 
