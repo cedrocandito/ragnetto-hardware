@@ -70,8 +70,8 @@ module servo_holder(with_bevel = false)
 
 module joint_arm(with_screw_holes=true)
 {
-	$fa = 1;
-	$fs = 0.2;
+	$fa = 3;
+	$fs = 0.1;
 	
 	w = servo_holder_w;
 	in_h = shaft_base2_extra_h + servo_holder_wall_size_bottom + servo_holder_gap_bottom + sg90_main_h + sg90_tower_h + sg90_hub_with_horn_h - servo_arm_thickness;
