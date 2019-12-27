@@ -2,6 +2,9 @@ include <include_sg90.scad>
 include <include_constants.scad>
 use <obiscad/bevel.scad>
 
+servo_holder(false);
+joint_arm();
+
 module servo_holder(with_bevel = false)
 {
 	$fa = 1;
@@ -135,6 +138,14 @@ module joint_arm()
 			// bottom shaft hole
 			translate([0, 0, servo_arm_thickness - shaft_h - shaft_hole_extra_h])
 				cylinder(d=shaft_d, h=shaft_h +shaft_hole_extra_h + 0.01, $fa = shaft_fa, $fs = shaft_fs);
+			
+			// screw holes
+			translate([0, -square_l - 0.01, out_h/2 - joint_screw_hole_distance / 2])
+				rotate([-90, 0, 0])
+					#cylinder(d=joint_screw_hole_d, h=servo_arm_bracket_size + 0.01 + 0.01);
+			translate([0, -square_l - 0.01, out_h/2 + joint_screw_hole_distance / 2])
+				rotate([-90, 0, 0])
+					#cylinder(d=joint_screw_hole_d, h=servo_arm_bracket_size + 0.01 + 0.01);
 		}
 	}
 }
