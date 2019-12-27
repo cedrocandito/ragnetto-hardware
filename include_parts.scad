@@ -1,15 +1,6 @@
 include <include_sg90.scad>
 include <include_constants.scad>
-include <include_servo_horn.scad>
 use <obiscad/bevel.scad>
-
-servo_holder_pillar_l = sg90_ledge_l_from_body - servo_holder_gap_side;
-servo_holder_w = sg90_main_w + servo_holder_gap_side * 2 + servo_holder_wall_size_side * 2;
-servo_holder_l = sg90_main_l + servo_holder_gap_side * 2 + servo_holder_pillar_l * 2;
-servo_holder_base_h = servo_holder_wall_size_bottom;
-servo_holder_axis_x = -servo_holder_w / 2;
-servo_holder_axis_y = -(sg90_main_l - sg90_main_l)/2 - sg90_tower_d/2 - servo_holder_gap_side - servo_holder_pillar_l;
-
 
 module servo_holder(with_bevel = false)
 {
@@ -149,6 +140,25 @@ module joint_arm()
 }
 
 
+module shaft()
+{
+	$fa = shaft_fa;
+	$fs = shaft_fs;
+	
+	// square base
+	translate([-shaft_base1_l / 2 + shaft_gap, -shaft_base1_l / 2 + shaft_gap, 0])
+		cube([shaft_base1_l - shaft_gap * 2, shaft_base1_l - shaft_gap * 2, shaft_base1_h]);
+
+	// round base
+	translate([0, 0, shaft_base1_h])
+		cylinder(d=shaft_base2_d - shaft_gap * 2, h=shaft_base2_h + shaft_base2_extra_h);
+	
+	// shaft
+	translate([0, 0, shaft_base1_h + shaft_base2_h + shaft_base2_extra_h])
+		cylinder(d=shaft_d - shaft_gap * 2, h=shaft_h);
+}
+
+
 // ----------------------------------------------------------------------------------------
 
 module servo_pillar(with_cable_slit=false)
@@ -183,3 +193,41 @@ module servo_pillar(with_cable_slit=false)
 		}
 	}
 }
+
+
+module servo_arm(height=1.35, gap=0.2)
+{
+	linear_extrude(height=height)
+		servo_arm_2d(gap);
+}
+
+
+
+module servo_arm_2d(gap)
+{
+	hub_r = servo_horn_hub_d / 2;
+	arm_tip_r = servo_horn_arm_w_min / 2;
+	arm_l = servo_horn_total_l - hub_r - arm_tip_r;
+
+	$fs = 0.1;
+	$fa = 1;
+	
+	rotate([0,0,-90])
+	{
+		offset(delta=gap)
+		{
+			union()
+			{
+				circle(d=servo_horn_hub_d);
+				polygon([
+					[0,-servo_horn_arm_w_max/2],
+					[arm_l,-arm_tip_r],
+					[arm_l,arm_tip_r],
+					[0,servo_horn_arm_w_max/2]
+				]);
+				translate([arm_l,0]) circle(d=servo_horn_arm_w_min);
+			}
+		}
+	}
+}
+

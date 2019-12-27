@@ -1,4 +1,4 @@
-include <include_servo_holder.scad>
+use <include_parts.scad>
 
 rotate([0,90,0])
 {

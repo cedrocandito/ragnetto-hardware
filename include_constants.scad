@@ -1,3 +1,5 @@
+include <include_sg90.scad>
+
 servo_holder_gap_bottom = 0;
 servo_holder_gap_side= 0.4;
 servo_holder_wall_size_bottom = 3;
@@ -26,9 +28,26 @@ shaft_base2_extra_h = 0.6;	// (to act like a washer)
 shaft_hole_extra_h = 0.5;	// in case the arm is thicker than the hole
 shaft_fa = 1;
 shaft_fs = 0.1;
+shaft_gap = 0.2;	// 0.2 when fast, 0.1 when slow and precise
+
+servo_horn_hub_d = 6.9;
+servo_horn_total_l = 19.6;
+servo_horn_arm_w_min = 3.9;
+servo_horn_arm_w_max = 5.6;
 
 bevel_r = 1.5;
 bevel_subdivisions = 8;
+
+// --------------------- derived ------------------------
+
+servo_holder_pillar_l = sg90_ledge_l_from_body - servo_holder_gap_side;
+servo_holder_w = sg90_main_w + servo_holder_gap_side * 2 + servo_holder_wall_size_side * 2;
+servo_holder_l = sg90_main_l + servo_holder_gap_side * 2 + servo_holder_pillar_l * 2;
+servo_holder_base_h = servo_holder_wall_size_bottom;
+servo_holder_axis_x = -servo_holder_w / 2;
+servo_holder_axis_y = -(sg90_main_l - sg90_main_l)/2 - sg90_tower_d/2 - servo_holder_gap_side - servo_holder_pillar_l;
+
+// ----------------- modules --------------------
 
 module simple_bevel(posizione, direzione, normale, lunghezza)
 {
