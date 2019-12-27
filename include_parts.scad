@@ -2,8 +2,8 @@ include <include_sg90.scad>
 include <include_constants.scad>
 use <obiscad/bevel.scad>
 
-servo_holder(false);
-joint_arm();
+servo_holder(with_bevel=false);
+joint_arm(with_screw_holes=true);
 
 module servo_holder(with_bevel = false)
 {
@@ -68,7 +68,7 @@ module servo_holder(with_bevel = false)
 }
 
 
-module joint_arm()
+module joint_arm(with_screw_holes=true)
 {
 	$fa = 1;
 	$fs = 0.2;
@@ -113,8 +113,8 @@ module joint_arm()
 				{
 					difference()
 					{
-						cylinder(d=servo_horn_hub_d + servo_horn_rim * 2 + servo_arm_servo_shaft_ring_thickness * 2, h=ring_h);
-						cylinder(d=servo_horn_hub_d + servo_horn_rim * 2 , h=ring_h);						
+						cylinder(d=servo_horn_hub_d + servo_horn_rim * 2 + servo_arm_servo_shaft_ring_thickness * 2, h=ring_h + 0.01);
+						cylinder(d=servo_horn_hub_d + servo_horn_rim * 2 , h=ring_h + 0.01);						
 					}
 				}
 			}
@@ -140,12 +140,23 @@ module joint_arm()
 				cylinder(d=shaft_d, h=shaft_h +shaft_hole_extra_h + 0.01, $fa = shaft_fa, $fs = shaft_fs);
 			
 			// screw holes
-			translate([0, -square_l - 0.01, out_h/2 - joint_screw_hole_distance / 2])
-				rotate([-90, 0, 0])
-					#cylinder(d=joint_screw_hole_d, h=servo_arm_bracket_size + 0.01 + 0.01);
-			translate([0, -square_l - 0.01, out_h/2 + joint_screw_hole_distance / 2])
-				rotate([-90, 0, 0])
-					#cylinder(d=joint_screw_hole_d, h=servo_arm_bracket_size + 0.01 + 0.01);
+			if (with_screw_holes)
+			{
+				for (i=[-1:2:1])
+				{
+					translate([0, -square_l + servo_arm_bracket_size + 0.01, out_h/2 + joint_screw_hole_distance / 2 * i])
+					{
+						rotate([90, 0, 0])
+						{
+							cylinder(d=joint_screw_hole_d, h=servo_arm_bracket_size + 0.01 + 0.01);
+							if (joint_screw_hole_cone_d > 0)
+							{
+								cylinder(d1=joint_screw_hole_cone_d, d2=joint_screw_hole_d, h=joint_screw_hole_cone_depth);
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 }
@@ -219,9 +230,6 @@ module servo_arm_2d(gap)
 	hub_r = servo_horn_hub_d / 2;
 	arm_tip_r = servo_horn_arm_w_min / 2;
 	arm_l = servo_horn_total_l - hub_r - arm_tip_r;
-
-	$fs = 0.1;
-	$fa = 1;
 	
 	rotate([0,0,-90])
 	{

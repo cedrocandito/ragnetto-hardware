@@ -10,7 +10,7 @@ servo_holder_wall_h = 10;
 servo_holder_cable_extra_room = 2.5;
 servo_holder_cable_extra_room_r = 10;
 
-servo_arm_bracket_size = 3.5;
+servo_arm_bracket_size = 4;
 servo_arm_extra_dist = 3;	// 0 is the minimal non-touching distance
 servo_arm_thickness = 3.5;
 servo_arm_servo_shaft_ring_thickness = 2;
@@ -20,6 +20,9 @@ servo_horn_rim = 0.2;
 
 joint_screw_hole_d = 2;
 joint_screw_hole_distance = 20;
+joint_screw_hole_cone_d = 5.6;	// if 0, no cone
+joint_screw_hole_cone_depth = 2;
+
 
 shaft_d = 5;
 shaft_h = servo_arm_thickness;
