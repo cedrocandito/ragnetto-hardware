@@ -132,8 +132,13 @@ module joint_arm(with_screw_holes=true)
 			}
 			
 			// passage for servo shaft in top arm
+			/*
 			translate([-w/2 - 0.01, -top_arm_passage_width/2, out_h - servo_arm_thickness - ring_h - 0.01])
 				cube([w/2, top_arm_passage_width, servo_arm_thickness + ring_h + 0.01 + 0.01]);
+			*/
+			rotate([0, 0, servo_arm_passage_angle])
+				translate([-top_arm_passage_width/2, 0, out_h - servo_arm_thickness - ring_h - 0.01])
+					cube([top_arm_passage_width, w/2 + 0.01, servo_arm_thickness + ring_h + 0.01 + 0.01]);
 			
 			// bottom shaft hole
 			translate([0, 0, servo_arm_thickness - shaft_h - shaft_hole_extra_h])
