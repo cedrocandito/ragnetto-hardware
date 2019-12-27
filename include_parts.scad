@@ -5,7 +5,10 @@ use <obiscad/bevel.scad>
 servo_holder(with_bevel=false);
 joint_arm(with_screw_holes=true);
 
-module servo_holder(with_bevel = false)
+/*
+"with_bevel" is a master switch, the others control single faces.
+*/
+module servo_holder(with_bevel = false, bevel_front = true, bevel_back = true, bevel_left = true, bevel_right = true, bevel_bottom = true)
 {
 	$fa = 1;
 	$fs = 0.15;
@@ -44,22 +47,30 @@ module servo_holder(with_bevel = false)
 				bevel_h = sg90_ledge_z + servo_holder_gap_bottom + servo_holder_base_h;
 				
 				// left front
-				simple_bevel([0,0,bevel_h/2], [0,0,1], [-1,-1,0], bevel_h);
+				if (bevel_front && bevel_left)
+					simple_bevel([0,0,bevel_h/2], [0,0,1], [-1,-1,0], bevel_h + 0.01);
 				// right front
-				simple_bevel([servo_holder_w,0,bevel_h/2], [0,0,1], [1,-1,0], bevel_h);
+				if (bevel_front && bevel_right)
+					simple_bevel([servo_holder_w,0,bevel_h/2], [0,0,1], [1,-1,0], bevel_h + 0.01);
 				// left back
-				simple_bevel([0,servo_holder_l,bevel_h/2], [0,0,1], [-1,1,0], bevel_h);
+				if (bevel_back && bevel_left)
+					simple_bevel([0,servo_holder_l,bevel_h/2], [0,0,1], [-1,1,0], bevel_h + 0.01);
 				// right back
-				simple_bevel([servo_holder_w,servo_holder_l,bevel_h/2], [0,0,1], [1,1,0], bevel_h);
+				if (bevel_back && bevel_right)
+					simple_bevel([servo_holder_w,servo_holder_l,bevel_h/2], [0,0,1], [1,1,0], bevel_h + 0.01);
 				
 				// bottom front
-				simple_bevel([servo_holder_w/2,0,0], [1,0,0], [0,-1,-1], servo_holder_w);
+				if (bevel_bottom && bevel_front)
+					simple_bevel([servo_holder_w/2,0,0], [1,0,0], [0,-1,-1], servo_holder_w + 0.01);
 				// bottom back
-				simple_bevel([servo_holder_w/2,servo_holder_l,0], [1,0,0], [0,1,-1], servo_holder_w);
+				if (bevel_bottom && bevel_back)
+					simple_bevel([servo_holder_w/2,servo_holder_l,0], [1,0,0], [0,1,-1], servo_holder_w + 0.01);
 				// bottom left
-				simple_bevel([0,servo_holder_l/2,0], [0,1,0], [-1,0,-1], servo_holder_l);
+				if (bevel_bottom && bevel_left)
+					simple_bevel([0,servo_holder_l/2,0], [0,1,0], [-1,0,-1], servo_holder_l + 0.01);
 				// bottom right
-				simple_bevel([servo_holder_w,servo_holder_l/2,0], [0,1,0], [1,0,-1], servo_holder_l);
+				if (bevel_bottom && bevel_right)
+					simple_bevel([servo_holder_w,servo_holder_l/2,0], [0,1,0], [1,0,-1], servo_holder_l + 0.01);
 			}
 		}
 	}
