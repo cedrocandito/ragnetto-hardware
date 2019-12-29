@@ -1,7 +1,7 @@
 use <include_parts.scad>
 
-rotate([90,0,0])
+rotate([0,90,0])
 {
-	%servo_holder(false);
-	joint_arm();
+	%servo_holder(with_bevel=false);
+	joint_arm(with_screw_holes=false);
 }

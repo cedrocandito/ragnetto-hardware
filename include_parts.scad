@@ -119,6 +119,10 @@ module joint_arm(with_screw_holes=true)
 					cylinder(d = w, h = servo_arm_thickness);
 				}
 				
+				// top arm horn bridge (to keep the horn tip down)
+				translate([-w/2, -square_l, out_h])
+					cube([w, servo_arm_horn_bridge_l, servo_arm_horn_bridge_h]);
+				
 				// top arm shaft ring
 				translate([0, 0, in_h + servo_arm_thickness - ring_h])
 				{
@@ -130,10 +134,10 @@ module joint_arm(with_screw_holes=true)
 				}
 			}
 			
-			// horn
-			translate([0,0,out_h - sg90_horn_h])
+			// space for horn
+			translate([0,0,out_h - sg90_horn_h - servo_arm_extra_horn_depth])
 			{
-				servo_arm(sg90_horn_h + 0.01, servo_horn_rim);	
+				servo_arm(sg90_horn_h + servo_arm_extra_horn_depth + 0.01, servo_horn_rim);	
 			}
 			
 			// horn hub
@@ -143,10 +147,6 @@ module joint_arm(with_screw_holes=true)
 			}
 			
 			// passage for servo shaft in top arm
-			/*
-			translate([-w/2 - 0.01, -top_arm_passage_width/2, out_h - servo_arm_thickness - ring_h - 0.01])
-				cube([w/2, top_arm_passage_width, servo_arm_thickness + ring_h + 0.01 + 0.01]);
-			*/
 			rotate([0, 0, servo_arm_passage_angle])
 				translate([-top_arm_passage_width/2, 0, out_h - servo_arm_thickness - ring_h - 0.01])
 					cube([top_arm_passage_width, w/2 + 0.01, servo_arm_thickness + ring_h + 0.01 + 0.01]);
