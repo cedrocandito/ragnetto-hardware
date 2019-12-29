@@ -120,6 +120,9 @@ module joint_arm(with_screw_holes=true)
 				}
 				
 				// top arm horn bridge (to keep the horn tip down)
+				horn_l = servo_horn_total_l - servo_horn_hub_d / 2;
+				servo_arm_horn_bridge_l = square_l - horn_l - servo_horn_rim + servo_arm_horn_bridge_coverage;
+				assert(servo_arm_horn_bridge_l > 0);
 				translate([-w/2, -square_l, out_h])
 					cube([w, servo_arm_horn_bridge_l, servo_arm_horn_bridge_h]);
 				
@@ -137,7 +140,7 @@ module joint_arm(with_screw_holes=true)
 			// space for horn
 			translate([0,0,out_h - sg90_horn_h - servo_arm_extra_horn_depth])
 			{
-				servo_arm(sg90_horn_h + servo_arm_extra_horn_depth + 0.01, servo_horn_rim);	
+				servo_horn(sg90_horn_h + servo_arm_extra_horn_depth + 0.01, servo_horn_rim);	
 			}
 			
 			// horn hub
@@ -233,15 +236,15 @@ module servo_pillar(with_cable_slit=false)
 }
 
 
-module servo_arm(height=1.35, gap=0.2)
+module servo_horn(height=1.35, gap=0.2)
 {
 	linear_extrude(height=height)
-		servo_arm_2d(gap);
+		servo_horn_2d(gap);
 }
 
 
 
-module servo_arm_2d(gap)
+module servo_horn_2d(gap)
 {
 	hub_r = servo_horn_hub_d / 2;
 	arm_tip_r = servo_horn_arm_w_min / 2;

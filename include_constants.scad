@@ -19,7 +19,7 @@ servo_arm_passage_angle = 90;
 servo_arm_passage_extra_w = 0.5; // 0 is exactly the size of the servo shaft
 servo_horn_rim = 0.2;
 servo_arm_extra_horn_depth = 0.3;
-servo_arm_horn_bridge_l = 8;
+servo_arm_horn_bridge_coverage = 1.5;
 servo_arm_horn_bridge_h = 1;
 
 joint_screw_hole_d = 2;
