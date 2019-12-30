@@ -8,7 +8,7 @@ rotate([0,90,0])
 	
 	union()
 	{
-		joint_arm(with_screw_holes=false);
+		joint_arm(with_screw_holes=false, with_bottom_bevel=false);
 	
 		translate([
 			servo_holder_w/2 - servo_holder_wall_size_bottom - servo_holder_gap_bottom,
