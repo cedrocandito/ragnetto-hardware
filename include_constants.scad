@@ -45,6 +45,9 @@ servo_horn_total_l = 19.6;
 servo_horn_arm_w_min = 3.9;
 servo_horn_arm_w_max = 5.6;
 
+leg_segment2_l = 50;	// distance between axes
+leg_segment3_l = 50; // distance between axis and tip
+
 bevel_r = 1.5;
 bevel_subdivisions = 8;
 
@@ -57,6 +60,7 @@ servo_holder_base_h = servo_holder_wall_size_bottom;
 servo_holder_axis_x = -servo_holder_w / 2;
 servo_holder_axis_y = -(sg90_main_l - sg90_main_l)/2 - sg90_tower_d/2 - servo_holder_gap_side - servo_holder_pillar_l;
 servo_holder_h = servo_holder_wall_size_bottom + servo_holder_gap_bottom + sg90_ledge_z;
+servo_holder_base_z = -servo_holder_gap_bottom - servo_holder_wall_size_bottom;
 
 servo_arm_bracket_dist = sqrt(servo_holder_axis_y * servo_holder_axis_y + servo_holder_axis_x * servo_holder_axis_x) + servo_arm_extra_dist;
 servo_arm_axis_to_bracket = - servo_arm_bracket_dist - servo_arm_bracket_size;

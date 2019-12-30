@@ -80,7 +80,7 @@ module servo_holder(with_bevel = false, bevel_front = true, bevel_back = true, b
 }
 
 
-module joint_arm(with_screw_holes=true)
+module joint_arm(with_bevel=true, with_screw_holes=true)
 {
 	$fa = 3;
 	$fs = 0.1;
@@ -126,6 +126,13 @@ module joint_arm(with_screw_holes=true)
 				assert(servo_arm_horn_bridge_l > 0);
 				translate([-w/2, -square_l, out_h])
 					cube([w, servo_arm_horn_bridge_l, servo_arm_horn_bridge_h]);
+				
+				// bevel
+				translate([0, -square_l + servo_arm_bracket_size, servo_arm_thickness])
+				{
+					simple_bevel([0,0,0],[1,0,0],[0,-1,-1],w,r = servo_arm_extra_dist / 2);
+					simple_bevel([0,0,in_h],[1,0,0],[0,-1,1],w, r = servo_arm_extra_dist / 2);
+				}
 				
 				// top arm shaft ring
 				translate([0, 0, in_h + servo_arm_thickness - ring_h])
