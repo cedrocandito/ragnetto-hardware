@@ -44,33 +44,34 @@ module servo_holder(with_bevel = false, bevel_front = true, bevel_back = true, b
 		{
 			translate([servo_holder_axis_x, servo_holder_axis_y, -servo_holder_base_h])
 			{
+				bevel_z = -servo_holder_gap_bottom;
 				bevel_h = sg90_ledge_z + servo_holder_gap_bottom + servo_holder_base_h;
 				
 				// left front
 				if (bevel_front && bevel_left)
-					simple_bevel([0,0,bevel_h/2], [0,0,1], [-1,-1,0], bevel_h + 0.01);
+					simple_bevel([0,0,bevel_z + bevel_h/2], [0,0,1], [-1,-1,0], bevel_h + 0.01);
 				// right front
 				if (bevel_front && bevel_right)
-					simple_bevel([servo_holder_w,0,bevel_h/2], [0,0,1], [1,-1,0], bevel_h + 0.01);
+					simple_bevel([servo_holder_w,0,bevel_z + bevel_h/2], [0,0,1], [1,-1,0], bevel_h + 0.01);
 				// left back
 				if (bevel_back && bevel_left)
-					simple_bevel([0,servo_holder_l,bevel_h/2], [0,0,1], [-1,1,0], bevel_h + 0.01);
+					simple_bevel([0,servo_holder_l,bevel_z + bevel_h/2], [0,0,1], [-1,1,0], bevel_h + 0.01);
 				// right back
 				if (bevel_back && bevel_right)
-					simple_bevel([servo_holder_w,servo_holder_l,bevel_h/2], [0,0,1], [1,1,0], bevel_h + 0.01);
+					simple_bevel([servo_holder_w,servo_holder_l,bevel_z + bevel_h/2], [0,0,1], [1,1,0], bevel_h + 0.01);
 				
 				// bottom front
 				if (bevel_bottom && bevel_front)
-					simple_bevel([servo_holder_w/2,0,0], [1,0,0], [0,-1,-1], servo_holder_w + 0.01);
+					simple_bevel([servo_holder_w/2,0,bevel_z], [1,0,0], [0,-1,-1], servo_holder_w + 0.01);
 				// bottom back
 				if (bevel_bottom && bevel_back)
-					simple_bevel([servo_holder_w/2,servo_holder_l,0], [1,0,0], [0,1,-1], servo_holder_w + 0.01);
+					simple_bevel([servo_holder_w/2,servo_holder_l,bevel_z], [1,0,0], [0,1,-1], servo_holder_w + 0.01);
 				// bottom left
 				if (bevel_bottom && bevel_left)
-					simple_bevel([0,servo_holder_l/2,0], [0,1,0], [-1,0,-1], servo_holder_l + 0.01);
+					simple_bevel([0,servo_holder_l/2,bevel_z], [0,1,0], [-1,0,-1], servo_holder_l + 0.01);
 				// bottom right
 				if (bevel_bottom && bevel_right)
-					simple_bevel([servo_holder_w,servo_holder_l/2,0], [0,1,0], [1,0,-1], servo_holder_l + 0.01);
+					simple_bevel([servo_holder_w,servo_holder_l/2,bevel_z], [0,1,0], [1,0,-1], servo_holder_l + 0.01);
 			}
 		}
 	}
@@ -87,7 +88,7 @@ module joint_arm(with_screw_holes=true)
 	w = servo_holder_w;
 	in_h = shaft_base2_extra_h + servo_holder_wall_size_bottom + servo_holder_gap_bottom + sg90_main_h + sg90_tower_h + sg90_hub_with_horn_h - servo_arm_thickness;
 	out_h = in_h + servo_arm_thickness * 2;
-	bracket_dist = sqrt(servo_holder_axis_y * servo_holder_axis_y + servo_holder_axis_x * servo_holder_axis_x) + servo_arm_extra_dist;
+	bracket_dist = servo_arm_bracket_dist;
 	l = bracket_dist + servo_arm_bracket_size + w/2;
 	square_l = l - w / 2;
 	shaft_hole_gap = 0.5;
@@ -234,7 +235,6 @@ module servo_pillar(with_cable_slit=false)
 		}
 	}
 }
-
 
 module servo_horn(height=1.35, gap=0.2)
 {

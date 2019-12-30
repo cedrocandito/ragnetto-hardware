@@ -1,4 +1,5 @@
 include <include_sg90.scad>
+use <obiscad/bevel.scad>
 
 servo_holder_gap_bottom = 0;
 servo_holder_gap_side= 0.4;
@@ -55,12 +56,23 @@ servo_holder_l = sg90_main_l + servo_holder_gap_side * 2 + servo_holder_pillar_l
 servo_holder_base_h = servo_holder_wall_size_bottom;
 servo_holder_axis_x = -servo_holder_w / 2;
 servo_holder_axis_y = -(sg90_main_l - sg90_main_l)/2 - sg90_tower_d/2 - servo_holder_gap_side - servo_holder_pillar_l;
+servo_holder_h = servo_holder_wall_size_bottom + servo_holder_gap_bottom + sg90_ledge_z;
+
+servo_arm_bracket_dist = sqrt(servo_holder_axis_y * servo_holder_axis_y + servo_holder_axis_x * servo_holder_axis_x) + servo_arm_extra_dist;
+servo_arm_axis_to_bracket = - servo_arm_bracket_dist - servo_arm_bracket_size;
+servo_arm_axis_to_base = -servo_holder_gap_bottom - servo_holder_wall_size_bottom - shaft_base2_extra_h - servo_arm_thickness;
+
+
+// ---------------- assertions --------------------
+
+assert(shaft_base1_l > shaft_base2_d);
+assert(shaft_base1_l < sg90_main_w);
 
 // ----------------- modules --------------------
 
-module simple_bevel(posizione, direzione, normale, lunghezza)
+module simple_bevel(posizione, direzione, normale, lunghezza, r = bevel_r)
 {
   c = [posizione, direzione, 0];
   n = [posizione, normale, 0];
-  bevel(c, n, cres = bevel_subdivisions, cr = bevel_r, l = lunghezza); 
+  bevel(c, n, cres = bevel_subdivisions, cr = r, l = lunghezza); 
 }
