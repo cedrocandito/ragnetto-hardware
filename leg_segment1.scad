@@ -23,14 +23,15 @@ rotate([0,90,0])
 					servo_holder(with_bevel = true, bevel_left = false, bevel_bottom = false);
 					
 					// buttresses
+					bevel_r =  min(servo_arm_bracket_size, servo_holder_h - servo_holder_w);
 					translate([
 						-servo_holder_w /2,
 						servo_holder_axis_y,
 						sg90_ledge_z - servo_holder_h + servo_holder_w
 					])
 					{
-						simple_bevel([0,servo_holder_pillar_l/2,0],[0,1,0],[1,0,-1],servo_holder_pillar_l, r = servo_arm_bracket_size);
-						simple_bevel([0,servo_holder_l - servo_holder_pillar_l/2,0],[0,1,0],[1,0,-1],servo_holder_pillar_l, r = servo_arm_bracket_size);
+						simple_bevel([0,servo_holder_pillar_l/2,0],[0,1,0],[1,0,-1],servo_holder_pillar_l, r = bevel_r);
+						simple_bevel([0,servo_holder_l - servo_holder_pillar_l/2,0],[0,1,0],[1,0,-1],servo_holder_pillar_l, r = bevel_r);
 					}
 				}
 			}
