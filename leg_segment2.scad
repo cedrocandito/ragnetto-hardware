@@ -14,7 +14,7 @@ rotate([0,90,0])
 	
 		translate([0, -leg_segment2_l, 0])
 		{
-			servo_holder(with_bevel = true, bevel_back = false, bevel_bottom=false);
+			mirror([1,0,0]) servo_holder(with_bevel = true, bevel_back = false, bevel_bottom=false);
 			translate([-servo_holder_w / 2, servo_holder_axis_y + servo_holder_l - 0.01, servo_holder_base_z])
 				cube([servo_holder_w, leg_segment2_l - min_link_l + 0.02, servo_holder_h]);
 		}
