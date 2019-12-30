@@ -80,7 +80,7 @@ module servo_holder(with_bevel = false, bevel_front = true, bevel_back = true, b
 }
 
 
-module joint_arm(with_bevel=true, with_screw_holes=true)
+module joint_arm(with_top_bevel=true, with_bottom_bevel=true, with_buttress=true, with_screw_holes=true)
 {
 	$fa = 3;
 	$fs = 0.1;
@@ -101,7 +101,7 @@ module joint_arm(with_bevel=true, with_screw_holes=true)
 		{
 			union()
 			{
-				// here origin is at base level, at shaft axis
+				// here origin is at base level, shaft axis
 			
 				// bottom arm
 				translate([-w/2, -square_l, 0])
@@ -127,13 +127,16 @@ module joint_arm(with_bevel=true, with_screw_holes=true)
 				translate([-w/2, -square_l, out_h])
 					cube([w, servo_arm_horn_bridge_l, servo_arm_horn_bridge_h]);
 				
-				// bevel
-				translate([0, -square_l + servo_arm_bracket_size, servo_arm_thickness])
+				// buttresses
+				if (with_buttress)
 				{
-					simple_bevel([0,0,0],[1,0,0],[0,-1,-1],w,r = servo_arm_extra_dist / 2);
-					simple_bevel([0,0,in_h],[1,0,0],[0,-1,1],w, r = servo_arm_extra_dist / 2);
+					translate([0, -square_l + servo_arm_bracket_size, servo_arm_thickness])
+					{
+						simple_bevel([0,0,0],[1,0,0],[0,-1,-1],w,r = servo_arm_extra_dist / 2);
+						simple_bevel([0,0,in_h],[1,0,0],[0,-1,1],w, r = servo_arm_extra_dist / 2);
+					}
 				}
-				
+					
 				// top arm shaft ring
 				translate([0, 0, in_h + servo_arm_thickness - ring_h])
 				{
@@ -184,6 +187,16 @@ module joint_arm(with_bevel=true, with_screw_holes=true)
 					}
 				}
 			}
+			
+			// bevel
+			translate([0, -square_l, 0])
+			{
+				if (with_bottom_bevel)
+					simple_bevel([0,0,0],[1,0,0],[0,-1,-1],w + 0.01,r = bevel_r * 2);
+				if (with_top_bevel)
+					simple_bevel([0,0,out_h + servo_arm_horn_bridge_h],[1,0,0],[0,-1,1],w + 0.01,r = bevel_r * 2);
+			}
+			
 		}
 	}
 }
