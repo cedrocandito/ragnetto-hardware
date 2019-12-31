@@ -4,6 +4,7 @@ use <obiscad/bevel.scad>
 
 servo_holder(with_bevel=false);
 joint_arm(with_screw_holes=true);
+translate([20,0,0]) cable_holder();
 
 /*
 "with_bevel" is a master switch, the others control single faces.
@@ -86,8 +87,6 @@ module joint_arm(with_top_bevel=true, with_bottom_bevel=true, with_buttress=true
 	$fs = 0.1;
 	
 	w = servo_holder_w;
-	in_h = shaft_base2_extra_h + servo_holder_wall_size_bottom + servo_holder_gap_bottom + sg90_main_h + sg90_tower_h + sg90_hub_with_horn_h - servo_arm_thickness;
-	out_h = in_h + servo_arm_thickness * 2;
 	bracket_dist = servo_arm_bracket_dist;
 	l = bracket_dist + servo_arm_bracket_size + w/2;
 	square_l = l - w / 2;
@@ -110,10 +109,10 @@ module joint_arm(with_top_bevel=true, with_bottom_bevel=true, with_buttress=true
 				
 				// bracket
 				translate([-w/2, -square_l, 0])
-					cube([w, servo_arm_bracket_size, out_h]);
+					cube([w, servo_arm_bracket_size, servo_arm_h_out]);
 					
 				// top arm
-				translate([0,0,in_h + servo_arm_thickness])
+				translate([0,0,servo_arm_h_in + servo_arm_thickness])
 				{
 					translate([-w/2, -square_l, 0])
 						cube([w, square_l, servo_arm_thickness]);
@@ -124,7 +123,7 @@ module joint_arm(with_top_bevel=true, with_bottom_bevel=true, with_buttress=true
 				horn_l = servo_horn_total_l - servo_horn_hub_d / 2;
 				servo_arm_horn_bridge_l = square_l - horn_l - servo_horn_rim + servo_arm_horn_bridge_coverage;
 				assert(servo_arm_horn_bridge_l > 0);
-				translate([-w/2, -square_l, out_h])
+				translate([-w/2, -square_l, servo_arm_h_out])
 					cube([w, servo_arm_horn_bridge_l, servo_arm_horn_bridge_h]);
 				
 				// buttresses
@@ -133,12 +132,12 @@ module joint_arm(with_top_bevel=true, with_bottom_bevel=true, with_buttress=true
 					translate([0, -square_l + servo_arm_bracket_size, servo_arm_thickness])
 					{
 						simple_bevel([0,0,0],[1,0,0],[0,-1,-1],w,r = servo_arm_extra_dist / 2);
-						simple_bevel([0,0,in_h],[1,0,0],[0,-1,1],w, r = servo_arm_extra_dist / 2);
+						simple_bevel([0,0,servo_arm_h_in],[1,0,0],[0,-1,1],w, r = servo_arm_extra_dist / 2);
 					}
 				}
 					
 				// top arm shaft ring
-				translate([0, 0, in_h + servo_arm_thickness - ring_h])
+				translate([0, 0, servo_arm_h_in + servo_arm_thickness - ring_h])
 				{
 					difference()
 					{
@@ -149,20 +148,20 @@ module joint_arm(with_top_bevel=true, with_bottom_bevel=true, with_buttress=true
 			}
 			
 			// space for horn
-			translate([0,0,out_h - sg90_horn_h - servo_arm_extra_horn_depth])
+			translate([0,0,servo_arm_h_out - sg90_horn_h - servo_arm_extra_horn_depth])
 			{
 				servo_horn(sg90_horn_h + servo_arm_extra_horn_depth + 0.01, servo_horn_rim);	
 			}
 			
 			// horn hub
-			translate([0,0,out_h - servo_arm_thickness - 0.01])
+			translate([0,0,servo_arm_h_out - servo_arm_thickness - 0.01])
 			{
 				cylinder(d = servo_horn_hub_d + servo_horn_rim * 2, h = servo_arm_thickness + 0.01);
 			}
 			
 			// passage for servo shaft in top arm
 			rotate([0, 0, servo_arm_passage_angle])
-				translate([-top_arm_passage_width/2, 0, out_h - servo_arm_thickness - ring_h - 0.01])
+				translate([-top_arm_passage_width/2, 0, servo_arm_h_out - servo_arm_thickness - ring_h - 0.01])
 					cube([top_arm_passage_width, w/2 + 0.01, servo_arm_thickness + ring_h + 0.01 + 0.01]);
 			
 			// bottom shaft hole
@@ -174,7 +173,7 @@ module joint_arm(with_top_bevel=true, with_bottom_bevel=true, with_buttress=true
 			{
 				for (i=[-1:2:1])
 				{
-					translate([0, -square_l + servo_arm_bracket_size + 0.01, out_h/2 + joint_screw_hole_distance / 2 * i])
+					translate([0, -square_l + servo_arm_bracket_size + 0.01, servo_arm_h_out/2 + joint_screw_hole_distance / 2 * i])
 					{
 						rotate([90, 0, 0])
 						{
@@ -194,7 +193,7 @@ module joint_arm(with_top_bevel=true, with_bottom_bevel=true, with_buttress=true
 				if (with_bottom_bevel)
 					simple_bevel([0,0,0],[1,0,0],[0,-1,-1],w + 0.01,r = bevel_r * 2);
 				if (with_top_bevel)
-					simple_bevel([0,0,out_h + servo_arm_horn_bridge_h],[1,0,0],[0,-1,1],w + 0.01,r = bevel_r * 2);
+					simple_bevel([0,0,servo_arm_h_out + servo_arm_horn_bridge_h],[1,0,0],[0,-1,1],w + 0.01,r = bevel_r * 2);
 			}
 			
 		}
@@ -218,6 +217,32 @@ module shaft()
 	// shaft
 	translate([0, 0, shaft_base1_h + shaft_base2_h + shaft_base2_extra_h])
 		cylinder(d=shaft_d - shaft_gap * 2, h=shaft_h);
+}
+
+
+module cable_holder()
+{
+	base_h = cable_holder_l - cable_holder_tooth_l - cable_holder_hole_l;
+	tot_thickness = cable_holder_thickness + cable_holder_hole_thickness;
+	translate([0,0,-cable_holder_l / 2])
+	{
+		rotate([90,0,0])
+		{
+			linear_extrude(height=cable_holder_w, center= true)
+			{
+				polygon([
+					[0,0],
+					[tot_thickness,0],
+					[tot_thickness, cable_holder_l],
+					[cable_holder_hole_thickness - cable_holder_tooth_thickness, cable_holder_l],
+					[cable_holder_hole_thickness - cable_holder_tooth_thickness, cable_holder_l - cable_holder_tooth_l],
+					[cable_holder_hole_thickness, cable_holder_l - cable_holder_tooth_l],
+					[cable_holder_hole_thickness, base_h],
+					[0, base_h]
+				]);
+			}
+		}
+	}
 }
 
 
