@@ -41,6 +41,6 @@ union()
 	
 
 	// cable holder
-	translate([-servo_arm_axis_to_base, servo_arm_axis_to_bracket + servo_arm_bracket_size + cable_holder_w/2, 0])
+	translate([-servo_arm_axis_to_base, servo_arm_axis_to_bracket , 0])
 		cable_holder();
 }

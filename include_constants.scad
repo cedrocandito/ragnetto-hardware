@@ -45,12 +45,10 @@ servo_horn_total_l = 19.6;
 servo_horn_arm_w_min = 3.9;
 servo_horn_arm_w_max = 5.6;
 
-cable_holder_thickness = 1.5;
-cable_holder_hole_thickness = 1.5;
-cable_holder_hole_l = 9;
-cable_holder_tooth_thickness = 0.7;
-cable_holder_tooth_l = 1;
-cable_holder_w = 8;
+cable_holder_thickness = 2;
+cable_holder_hole_thickness = 2.7;
+cable_holder_hole_l = 10;
+cable_holder_w = 4;
 
 leg_segment2_l = 50;	// distance between axes
 leg_segment3_l = 50; // distance between axis and tip

@@ -222,25 +222,14 @@ module shaft()
 
 module cable_holder()
 {
-	base_h = cable_holder_l - cable_holder_tooth_l - cable_holder_hole_l;
 	tot_thickness = cable_holder_thickness + cable_holder_hole_thickness;
 	translate([0,0,-cable_holder_l / 2])
 	{
-		rotate([90,0,0])
+		difference()
 		{
-			linear_extrude(height=cable_holder_w, center= true)
-			{
-				polygon([
-					[0,0],
-					[tot_thickness,0],
-					[tot_thickness, cable_holder_l],
-					[cable_holder_hole_thickness - cable_holder_tooth_thickness, cable_holder_l],
-					[cable_holder_hole_thickness - cable_holder_tooth_thickness, cable_holder_l - cable_holder_tooth_l],
-					[cable_holder_hole_thickness, cable_holder_l - cable_holder_tooth_l],
-					[cable_holder_hole_thickness, base_h],
-					[0, base_h]
-				]);
-			}
+			cube([tot_thickness, cable_holder_w, cable_holder_l]);
+			translate([-0.01, -0.01, (cable_holder_l - cable_holder_hole_l) / 2])
+				cube([cable_holder_hole_thickness, cable_holder_w+0.02, cable_holder_hole_l]);
 		}
 	}
 }
