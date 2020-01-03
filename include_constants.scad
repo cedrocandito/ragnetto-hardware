@@ -1,5 +1,4 @@
 include <include_sg90.scad>
-use <obiscad/bevel.scad>
 
 servo_holder_gap_bottom = 0;
 servo_holder_gap_side= 0.4;
@@ -58,9 +57,13 @@ pwm_controller_size_long =  62.23;
 pwm_controller_hole_d = 3;
 pwm_controller_hole_distance_short = 19.05;
 pwm_controller_hole_distance_long = 55.88;
+pwm_controller_hole_h = 13;
+pwm_controller_pillar_h = 15;
+pwm_controller_pillar_d_top = 5;
+pwm_controller_pillar_d_base = 8;
 
 bevel_r = 1.5;
-bevel_subdivisions = 8;
+bevel_fs = 0.3;
 
 
 // --------------------- derived ------------------------
@@ -86,12 +89,3 @@ cable_holder_l =servo_holder_w;
 
 assert(shaft_base1_l > shaft_base2_d);
 assert(shaft_base1_l < sg90_main_w);
-
-// ----------------- modules --------------------
-
-module simple_bevel(posizione, direzione, normale, lunghezza, r = bevel_r)
-{
-  c = [posizione, direzione, 0];
-  n = [posizione, normale, 0];
-  bevel(c, n, cres = bevel_subdivisions, cr = r, l = lunghezza); 
-}

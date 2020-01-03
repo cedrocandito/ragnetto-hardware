@@ -1,8 +1,8 @@
 include <include_sg90.scad>
 include <include_constants.scad>
-use <obiscad/bevel.scad>
+use <davel/davel.scad>
 
-servo_holder(with_bevel=false);
+servo_holder(with_bevel=true);
 joint_arm(with_screw_holes=true);
 translate([20,0,0]) cable_holder();
 
@@ -12,7 +12,7 @@ translate([20,0,0]) cable_holder();
 module servo_holder(with_bevel = false, bevel_front = true, bevel_back = true, bevel_left = true, bevel_right = true, bevel_bottom = true)
 {
 	$fa = 1;
-	$fs = 0.15;
+	$fs = 0.2;
 	
 	difference()
 	{
@@ -43,36 +43,14 @@ module servo_holder(with_bevel = false, bevel_front = true, bevel_back = true, b
 		// bevel edges
 		if (with_bevel)
 		{
-			translate([servo_holder_axis_x, servo_holder_axis_y, -servo_holder_base_h])
+			$fs = bevel_fs;
+			bevel_z = -servo_holder_gap_bottom;
+			bevel_h = sg90_ledge_z + servo_holder_gap_bottom + servo_holder_base_h;
+			
+			translate([servo_holder_axis_x, servo_holder_axis_y, -servo_holder_base_h + bevel_z])
 			{
-				bevel_z = -servo_holder_gap_bottom;
-				bevel_h = sg90_ledge_z + servo_holder_gap_bottom + servo_holder_base_h;
-				
-				// left front
-				if (bevel_front && bevel_left)
-					simple_bevel([0,0,bevel_z + bevel_h/2], [0,0,1], [-1,-1,0], bevel_h + 0.01);
-				// right front
-				if (bevel_front && bevel_right)
-					simple_bevel([servo_holder_w,0,bevel_z + bevel_h/2], [0,0,1], [1,-1,0], bevel_h + 0.01);
-				// left back
-				if (bevel_back && bevel_left)
-					simple_bevel([0,servo_holder_l,bevel_z + bevel_h/2], [0,0,1], [-1,1,0], bevel_h + 0.01);
-				// right back
-				if (bevel_back && bevel_right)
-					simple_bevel([servo_holder_w,servo_holder_l,bevel_z + bevel_h/2], [0,0,1], [1,1,0], bevel_h + 0.01);
-				
-				// bottom front
-				if (bevel_bottom && bevel_front)
-					simple_bevel([servo_holder_w/2,0,bevel_z], [1,0,0], [0,-1,-1], servo_holder_w + 0.01);
-				// bottom back
-				if (bevel_bottom && bevel_back)
-					simple_bevel([servo_holder_w/2,servo_holder_l,bevel_z], [1,0,0], [0,1,-1], servo_holder_w + 0.01);
-				// bottom left
-				if (bevel_bottom && bevel_left)
-					simple_bevel([0,servo_holder_l/2,bevel_z], [0,1,0], [-1,0,-1], servo_holder_l + 0.01);
-				// bottom right
-				if (bevel_bottom && bevel_right)
-					simple_bevel([servo_holder_w,servo_holder_l/2,bevel_z], [0,1,0], [1,0,-1], servo_holder_l + 0.01);
+				davel_cube_bevel(
+					[servo_holder_w, servo_holder_l, bevel_h], r=bevel_r, top = false, front=bevel_front, back=bevel_back, left = bevel_left, right=bevel_right, bottom=bevel_bottom, $fs = 0.3);
 			}
 		}
 	}
@@ -83,8 +61,8 @@ module servo_holder(with_bevel = false, bevel_front = true, bevel_back = true, b
 
 module joint_arm(with_top_bevel=true, with_bottom_bevel=true, with_buttress=true, with_screw_holes=true)
 {
-	$fa = 3;
-	$fs = 0.1;
+	$fa = 1;
+	$fs = 0.2;
 	
 	w = servo_holder_w;
 	bracket_dist = servo_arm_bracket_dist;
@@ -129,10 +107,11 @@ module joint_arm(with_top_bevel=true, with_bottom_bevel=true, with_buttress=true
 				// buttresses
 				if (with_buttress)
 				{
+					$fs = bevel_fs;
 					translate([0, -square_l + servo_arm_bracket_size, servo_arm_thickness])
 					{
-						simple_bevel([0,0,0],[1,0,0],[0,-1,-1],w,r = servo_arm_extra_dist / 2);
-						simple_bevel([0,0,servo_arm_h_in],[1,0,0],[0,-1,1],w, r = servo_arm_extra_dist / 2);
+						davel_buttress_pos([0,0,0], w, [0,0,1],[0,1,0], r = servo_arm_extra_dist / 2);
+						davel_buttress_pos([0,0,servo_arm_h_in], w, [0,0,-1],[0,1,0], r = servo_arm_extra_dist / 2);
 					}
 				}
 					
@@ -190,12 +169,13 @@ module joint_arm(with_top_bevel=true, with_bottom_bevel=true, with_buttress=true
 			// bevel
 			translate([0, -square_l, 0])
 			{
+				$fs = bevel_fs;
 				if (with_bottom_bevel)
-					simple_bevel([0,0,0],[1,0,0],[0,-1,-1],w + 0.01,r = bevel_r * 2);
+					davel_bevel_pos([0,0,0], w, [0,0,-1], [0,-1,0], bevel_r * 2.5);
+					//simple_bevel([0,0,0],[1,0,0],[0,-1,-1],w + 0.01,r = bevel_r * 2);
 				if (with_top_bevel)
-					simple_bevel([0,0,servo_arm_h_out + servo_arm_horn_bridge_h],[1,0,0],[0,-1,1],w + 0.01,r = bevel_r * 2);
+					davel_bevel_pos([0,0,servo_arm_h_out + servo_arm_horn_bridge_h], w, [0,0,1], [0,-1,0], bevel_r * 2.5);
 			}
-			
 		}
 	}
 }

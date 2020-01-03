@@ -1,4 +1,5 @@
 use <include_parts.scad>
+use <davel/davel.scad>
 include <include_constants.scad>
 
 min_link_l =  -servo_arm_axis_to_bracket + servo_holder_l + servo_holder_axis_y;
@@ -31,8 +32,10 @@ union()
 					
 					translate([0, servo_arm_axis_to_bracket, servo_holder_base_z])
 					{
-						simple_bevel([0,0,0],[1,0,0],[0,1,1],servo_holder_w, r);
-						simple_bevel([0,0,servo_holder_h],[1,0,0],[0,1,-1],servo_holder_w, r);
+						$fs = bevel_fs;
+						$fa = 1;
+						davel_buttress_pos([0,0,0], servo_holder_w, [0,-1,0], [0,0,-1], r);
+						davel_buttress_pos([0,0,servo_holder_h], servo_holder_w, [0,-1,0], [0,0,1], r);
 					}
 				}
 			}

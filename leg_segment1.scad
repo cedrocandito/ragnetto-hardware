@@ -1,6 +1,9 @@
 use <include_parts.scad>
+use <davel/davel.scad>
 include <include_constants.scad>
 
+$fa = 1;
+$fs = 0.2;
 
 rotate([0,90,0])
 {
@@ -30,8 +33,11 @@ rotate([0,90,0])
 						sg90_ledge_z - servo_holder_h + servo_holder_w
 					])
 					{
-						simple_bevel([0,servo_holder_pillar_l/2,0],[0,1,0],[1,0,-1],servo_holder_pillar_l, r = bevel_r);
-						simple_bevel([0,servo_holder_l - servo_holder_pillar_l/2,0],[0,1,0],[1,0,-1],servo_holder_pillar_l, r = bevel_r);
+						$fs = bevel_fs;
+						davel_buttress_pos([0,servo_holder_pillar_l/2,0], servo_holder_pillar_l, [-1,0,0], [0,0,1],bevel_r);
+						davel_buttress_pos([0,servo_holder_l - servo_holder_pillar_l/2,0], servo_holder_pillar_l, [-1,0,0], [0,0,1],bevel_r);
+						//simple_bevel([0,servo_holder_pillar_l/2,0],[0,1,0],[1,0,-1],servo_holder_pillar_l, r = bevel_r);
+						//simple_bevel([0,servo_holder_l - servo_holder_pillar_l/2,0],[0,1,0],[1,0,-1],servo_holder_pillar_l, r = bevel_r);
 					}
 				}
 			}

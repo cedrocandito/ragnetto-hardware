@@ -39,14 +39,10 @@ module foot(w, l, h, bevel=bevel_r, with_ball_tip = false)
 			difference()
 			{
 				// sides
+				p = [ for(i=[0:0.01:1]) [i*i*i * w/2, (1-i)*la]];
 				linear_extrude(height=h, center=true)
 				{
-					difference()
-					{
-						translate([-w/2, 0]) square([w, la]);
-						translate([-circle_r - tip_width/2, la + bend_offset_side]) circle(r=circle_r);
-						translate([circle_r + tip_width/2, la + bend_offset_side]) circle(r=circle_r);
-					}
+					polygon(p);
 				}
 				
 				// top
