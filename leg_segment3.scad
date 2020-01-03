@@ -3,7 +3,8 @@ include <include_constants.scad>
 
 with_ball_tip = false;
 base_width = servo_arm_h_in;
-tip_width = 5;
+tip_width = 7;
+tip_ball_d = 5;
 circle_r = 107;
 bend_offset_side = 7;
 bend_offset_top = 0;
@@ -32,6 +33,7 @@ mirror([1,0,0])
 module foot(w, l, h, bevel=bevel_r, with_ball_tip = false)
 {
 	la = l - tip_width/2;
+	
 	rotate([0,90,180])
 	{		
 		union()
@@ -39,10 +41,12 @@ module foot(w, l, h, bevel=bevel_r, with_ball_tip = false)
 			difference()
 			{
 				// sides
-				p = [ for(i=[0:0.01:1]) [i*i*i * w/2, (1-i)*la]];
+				punti_dx = [ for(i=[0:0.01:1]) [i*i*i * w/2 + tip_width/2, (1-i)*la]];
+				punti_sx = [ for(i=[1:len(punti_dx)]) [-punti_dx[len(punti_dx)-i][0], punti_dx[len(punti_dx)-i][1]] ];
+				// FIXME: invertire ordine dx
 				linear_extrude(height=h, center=true)
 				{
-					polygon(p);
+					polygon(concat(punti_sx, punti_dx));
 				}
 				
 				// top
@@ -59,7 +63,7 @@ module foot(w, l, h, bevel=bevel_r, with_ball_tip = false)
 				{
 					if (!with_ball_tip)
 					{
-						sphere(d=tip_width);
+						sphere(d=tip_ball_d);
 					}
 				}
 			}
@@ -69,10 +73,10 @@ module foot(w, l, h, bevel=bevel_r, with_ball_tip = false)
 			{
 				if (with_ball_tip)
 				{
-					sphere(d=tip_width);
+					sphere(d=tip_ball_d);
 				}
 			}
 		}
-	}	
+	}
 }
 
