@@ -53,6 +53,14 @@ cable_holder_w = 4;
 
 leg_segment2_l = 60;	// distance between axes
 leg_segment3_l = 60; // distance between axis and tip
+foot_with_ball_tip = false;
+foot_w = 7;
+foot_h = 7;
+foot_tip_ball_d = min(foot_w, foot_h);
+foot_tip_hole_d = 5;
+foot_l = foot_tip_ball_d/2;
+lower_leg_beam_thickness = 5;
+lower_leg_side_space = 3;
 
 pwm_controller_size_short = 22.35;
 pwm_controller_size_long =  62.23;
