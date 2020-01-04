@@ -172,7 +172,6 @@ module joint_arm(servo_arm_extra_dist, with_top_bevel=true, with_bottom_bevel=tr
 				$fs = bevel_fs;
 				if (with_bottom_bevel)
 					davel_bevel_pos([0,0,0], w, [0,0,-1], [0,-1,0], bevel_r * 2.5);
-					//simple_bevel([0,0,0],[1,0,0],[0,-1,-1],w + 0.01,r = bevel_r * 2);
 				if (with_top_bevel)
 					davel_bevel_pos([0,0,servo_arm_h_out + servo_arm_horn_bridge_h], w, [0,0,1], [0,-1,0], bevel_r * 2.5);
 			}
