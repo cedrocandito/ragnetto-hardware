@@ -206,9 +206,24 @@ module cable_holder()
 	{
 		difference()
 		{
-			cube([tot_thickness, cable_holder_w, cable_holder_l]);
+			union()
+			{
+				// outer block
+				cube([tot_thickness, cable_holder_w, cable_holder_l]);
+				
+				// hole buttresses
+				translate([-0.01, -0.01, (cable_holder_l - cable_holder_hole_l) / 2])
+				{
+					davel_cube_bevel([cable_holder_hole_thickness, cable_holder_w+0.02, cable_holder_hole_l], r=cable_holder_thickness / 2, left=false, front=false, back= false, $fs = 0.1);
+				}
+			}
+			
+			// hole
 			translate([-0.01, -0.01, (cable_holder_l - cable_holder_hole_l) / 2])
 				cube([cable_holder_hole_thickness, cable_holder_w+0.02, cable_holder_hole_l]);
+			
+			// outer bevel
+			davel_cube_bevel([tot_thickness, cable_holder_w, cable_holder_l], r=cable_holder_thickness, left=false, front=false, back= false, $fs = 0.1);
 		}
 	}
 }
