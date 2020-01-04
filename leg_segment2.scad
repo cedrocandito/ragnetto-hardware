@@ -2,6 +2,10 @@ use <include_parts.scad>
 use <davel/davel.scad>
 include <include_constants.scad>
 
+
+servo_arm_extra_dist = servo_arm_extra_dist_max;
+servo_arm_axis_to_bracket = f_servo_arm_axis_to_bracket(servo_arm_extra_dist);
+
 min_link_l =  -servo_arm_axis_to_bracket + servo_holder_l + servo_holder_axis_y;
 assert(leg_segment2_l > min_link_l);
 
@@ -16,7 +20,7 @@ union()
 			
 			union()
 			{
-				joint_arm(with_screw_holes=false, with_bottom_bevel=false);
+				joint_arm(servo_arm_extra_dist, with_screw_holes=false, with_bottom_bevel=false);
 			
 				translate([0, -leg_segment2_l, 0])
 				{

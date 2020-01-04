@@ -5,13 +5,16 @@ include <include_constants.scad>
 $fa = 1;
 $fs = 0.2;
 
+servo_arm_extra_dist = servo_arm_extra_dist_min;
+servo_arm_axis_to_bracket = f_servo_arm_axis_to_bracket(servo_arm_extra_dist);
+
 rotate([0,90,0])
 {
 	%servo_holder(with_bevel=false);
-	
+		
 	union()
 	{
-		joint_arm(with_screw_holes=false, with_bottom_bevel=false);
+		joint_arm(servo_arm_extra_dist = servo_arm_extra_dist_min, with_screw_holes=false, with_bottom_bevel=false);
 	
 		translate([
 			servo_holder_w/2 - servo_holder_wall_size_bottom - servo_holder_gap_bottom,
@@ -36,8 +39,6 @@ rotate([0,90,0])
 						$fs = bevel_fs;
 						davel_buttress_pos([0,servo_holder_pillar_l/2,0], servo_holder_pillar_l, [-1,0,0], [0,0,1],bevel_r);
 						davel_buttress_pos([0,servo_holder_l - servo_holder_pillar_l/2,0], servo_holder_pillar_l, [-1,0,0], [0,0,1],bevel_r);
-						//simple_bevel([0,servo_holder_pillar_l/2,0],[0,1,0],[1,0,-1],servo_holder_pillar_l, r = bevel_r);
-						//simple_bevel([0,servo_holder_l - servo_holder_pillar_l/2,0],[0,1,0],[1,0,-1],servo_holder_pillar_l, r = bevel_r);
 					}
 				}
 			}

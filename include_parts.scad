@@ -3,7 +3,7 @@ include <include_constants.scad>
 use <davel/davel.scad>
 
 servo_holder(with_bevel=true);
-joint_arm(with_screw_holes=true);
+joint_arm(servo_arm_extra_dist=servo_arm_extra_dist_min, with_screw_holes=true);
 translate([20,0,0]) cable_holder();
 
 /*
@@ -59,13 +59,13 @@ module servo_holder(with_bevel = false, bevel_front = true, bevel_back = true, b
 }
 
 
-module joint_arm(with_top_bevel=true, with_bottom_bevel=true, with_buttress=true, with_screw_holes=true)
+module joint_arm(servo_arm_extra_dist, with_top_bevel=true, with_bottom_bevel=true, with_buttress=true, with_screw_holes=true)
 {
 	$fa = 1;
 	$fs = 0.2;
 	
 	w = servo_holder_w;
-	bracket_dist = servo_arm_bracket_dist;
+	bracket_dist = f_servo_arm_bracket_dist(servo_arm_extra_dist);
 	l = bracket_dist + servo_arm_bracket_size + w/2;
 	square_l = l - w / 2;
 	shaft_hole_gap = 0.5;
@@ -110,8 +110,8 @@ module joint_arm(with_top_bevel=true, with_bottom_bevel=true, with_buttress=true
 					$fs = bevel_fs;
 					translate([0, -square_l + servo_arm_bracket_size, servo_arm_thickness])
 					{
-						davel_buttress_pos([0,0,0], w, [0,0,1],[0,1,0], r = servo_arm_extra_dist / 2);
-						davel_buttress_pos([0,0,servo_arm_h_in], w, [0,0,-1],[0,1,0], r = servo_arm_extra_dist / 2);
+						davel_buttress_pos([0,0,0], w, [0,0,1],[0,1,0], r = servo_arm_buttress_r);
+						davel_buttress_pos([0,0,servo_arm_h_in], w, [0,0,-1],[0,1,0], r = servo_arm_buttress_r);
 					}
 				}
 					

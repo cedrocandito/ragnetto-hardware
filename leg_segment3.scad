@@ -12,6 +12,10 @@ bend_offset_top = 0;
 $fa=0.5;
 $fs = 0.5;
 
+servo_arm_extra_dist = servo_arm_extra_dist_min;
+servo_arm_axis_to_bracket = f_servo_arm_axis_to_bracket(servo_arm_extra_dist);
+
+
 mirror([1,0,0])
 {
 	rotate([0,90,0])
@@ -20,11 +24,11 @@ mirror([1,0,0])
 		
 		union()
 		{
-			joint_arm(with_screw_holes=false, with_bottom_bevel=true);
+			joint_arm(servo_arm_extra_dist, with_screw_holes=false, with_bottom_bevel=true);
 		
 			translate([0, servo_arm_axis_to_bracket + servo_arm_bracket_size / 2, servo_arm_axis_to_base + servo_arm_h_out / 2])
 			{
-				foot(l = leg_segment3_l, w =base_width, h = servo_holder_w, with_ball_tip = with_ball_tip);
+				foot(l = leg_segment3_l - abs(servo_arm_axis_to_bracket), w =base_width, h = servo_holder_w, with_ball_tip = with_ball_tip);
 			}
 		}
 	}
