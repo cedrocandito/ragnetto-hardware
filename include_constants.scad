@@ -12,7 +12,7 @@ servo_holder_cable_extra_room_r = 10;
 
 servo_arm_bracket_size = 4;
 servo_arm_extra_dist_min = 3;	// 0 is the minimal non-touching distance
-servo_arm_extra_dist_max = 10;
+servo_arm_extra_dist_max = 13;
 servo_arm_thickness = 3.5;
 servo_arm_servo_shaft_ring_thickness = 2;
 servo_arm_servo_shaft_ring_gap = 0.4;	// to allow better movement
@@ -47,7 +47,7 @@ servo_horn_arm_w_min = 3.9;
 servo_horn_arm_w_max = 5.6;
 
 cable_holder_thickness = 2.5;
-cable_holder_hole_thickness = 3;
+cable_holder_hole_thickness = 3.5;
 cable_holder_hole_l = 11;
 cable_holder_w = 4;
 

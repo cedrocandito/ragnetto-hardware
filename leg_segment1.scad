@@ -8,40 +8,48 @@ $fs = 0.2;
 servo_arm_extra_dist = servo_arm_extra_dist_min;
 servo_arm_axis_to_bracket = f_servo_arm_axis_to_bracket(servo_arm_extra_dist);
 
-rotate([0,90,0])
+union()
 {
-	%servo_holder(with_bevel=false);
-		
-	union()
+	rotate([0,90,0])
 	{
-		joint_arm(servo_arm_extra_dist = servo_arm_extra_dist_min, with_screw_holes=false, with_bottom_bevel=false);
-	
-		translate([
-			servo_holder_w/2 - servo_holder_wall_size_bottom - servo_holder_gap_bottom,
-			servo_arm_axis_to_bracket - servo_holder_w/2,
-			servo_arm_axis_to_base - servo_holder_axis_y
-		])
+		%servo_holder(with_bevel=false);
+			
+		union()
 		{
-			rotate([0, -90,0])
+			joint_arm(servo_arm_extra_dist = servo_arm_extra_dist_min, with_screw_holes=false, with_bottom_bevel=false);
+		
+			translate([
+				servo_holder_w/2 - servo_holder_wall_size_bottom - servo_holder_gap_bottom,
+				servo_arm_axis_to_bracket - servo_holder_w/2 + 0.01 /* merge objects together */,
+				servo_arm_axis_to_base - servo_holder_axis_y
+			])
 			{
-				rotate([0, 0,-90])
+				rotate([0, -90,0])
 				{
-					servo_holder(with_bevel = true, bevel_left = false, bevel_bottom = false);
-					
-					// buttresses
-					bevel_r =  min(servo_arm_bracket_size, servo_holder_h - servo_holder_w);
-					translate([
-						-servo_holder_w /2,
-						servo_holder_axis_y,
-						sg90_ledge_z - servo_holder_h + servo_holder_w
-					])
+					rotate([0, 0,-90])
 					{
-						$fs = bevel_fs;
-						davel_buttress_pos([0,servo_holder_pillar_l/2,0], servo_holder_pillar_l, [-1,0,0], [0,0,1],bevel_r);
-						davel_buttress_pos([0,servo_holder_l - servo_holder_pillar_l/2,0], servo_holder_pillar_l, [-1,0,0], [0,0,1],bevel_r);
+						servo_holder(with_bevel = true, bevel_left = false, bevel_bottom = false);
+						
+						// buttresses
+						bevel_r =  min(servo_arm_bracket_size, servo_holder_h - servo_holder_w);
+						translate([
+							-servo_holder_w /2,
+							servo_holder_axis_y,
+							sg90_ledge_z - servo_holder_h + servo_holder_w
+						])
+						{
+							$fs = bevel_fs;
+							davel_buttress_pos([0,servo_holder_pillar_l/2,0], servo_holder_pillar_l, [-1,0,0], [0,0,1],bevel_r);
+							davel_buttress_pos([0,servo_holder_l - servo_holder_pillar_l/2,0], servo_holder_pillar_l, [-1,0,0], [0,0,1],bevel_r);
+						}
 					}
 				}
 			}
 		}
 	}
+		
+	// cable holder
+	translate([servo_arm_axis_to_base, servo_arm_axis_to_bracket / 2, 0])
+		rotate([0,0,180])
+			cable_holder();
 }

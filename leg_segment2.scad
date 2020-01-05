@@ -24,9 +24,43 @@ union()
 			
 				translate([0, -leg_segment2_l, 0])
 				{
-					mirror([1,0,0]) servo_holder(with_bevel = true, bevel_back = false, bevel_bottom=false);
+					// servo holder
+					mirror([1,0,0])
+					{
+						servo_holder(with_bevel = true, bevel_back = false, bevel_bottom=false);
+					}
+					
+					// connecting block
 					translate([-servo_holder_w / 2, servo_holder_axis_y + servo_holder_l - 0.01, servo_holder_base_z])
-						cube([servo_holder_w, leg_segment2_l - min_link_l + 0.02, servo_holder_h]);
+					{
+						hole_l =  leg_segment2_l - min_link_l;
+						hole_h = servo_holder_h - servo_arm_bracket_size * 2;
+						carve_hole = (hole_l > bevel_r * 2);
+						hole_pos = [0,0,servo_arm_bracket_size];
+						hole_size = [servo_holder_w + 0.02, hole_l, hole_h];
+						
+						union()
+						{
+							difference()
+							{
+								cube([servo_holder_w, leg_segment2_l - min_link_l + 0.02, servo_holder_h]);
+								
+								// hole in the connecting block (if enough space)
+								if (carve_hole)
+								{
+									translate(hole_pos - [0.01,0,0]) cube(hole_size);
+								}
+							}
+							
+							//  buttress for hole in the connecting block (if enough space)
+							if (carve_hole)
+							{
+								$fs = bevel_fs;
+								$fa = 1;
+								translate(hole_pos) davel_cube_buttress(hole_size, r=bevel_r, left=false, right=false);
+							}
+						}
+					}
 				}
 				
 				// buttresses
@@ -45,7 +79,6 @@ union()
 			}
 		}
 	}
-	
 
 	// cable holder
 	translate([-servo_arm_axis_to_base, servo_arm_axis_to_bracket , 0])
