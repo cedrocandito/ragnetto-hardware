@@ -23,7 +23,7 @@ union()
 		}
 	}
 		
-	translate([-servo_arm_axis_to_base - servo_arm_h_out / 2, servo_arm_axis_to_bracket, 0])
+	translate([-servo_arm_axis_to_base - servo_arm_h_out / 2, servo_arm_axis_to_bracket + 0.01, 0])
 	{
 			leg(l = leg_segment3_l - abs(servo_arm_axis_to_bracket), w =lower_leg_w, h = servo_holder_w, foot_with_ball_tip = foot_with_ball_tip);
 	}
