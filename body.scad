@@ -5,14 +5,11 @@ use <davel/davel.scad>
 $fa=1;
 $fs=0.2;
 
-body_r_bottom =55;
-body_r_top = 62;
-body_r_axes = 85;
+body_r_axes = 75;
+body_r= body_r_axes - servo_holder_axis_y - servo_holder_l + servo_holder_pillar_l;
 body_h = servo_holder_h;
 base_plate_h = servo_holder_wall_size_bottom;
-
 body_shell_thickness = 2;
-body_servo_holder_attachment_l = 10;
 
 union()
 {
@@ -22,43 +19,39 @@ union()
 	// walls
 	difference()
 	{
-		scale_top = body_r_top / body_r_bottom;
-		linear_extrude(height=body_h, scale=scale_top) shell_profile(body_r_bottom);
-		linear_extrude(height=body_h + 0.01, scale = scale_top) shell_profile(body_r_bottom - body_shell_thickness);
+		// wall
+		linear_extrude(height=body_h) shell_profile(body_r);
+		// inside cavity
+		linear_extrude(height=body_h + 0.01 ) shell_profile(body_r - body_shell_thickness);
+		
+		// holes in the wall so the body doesn't fill the holder screw holes
+		for (i=[0:5])
+		{
+			servo_holder_position(i)
+			{
+				translate([-servo_holder_w/2, servo_holder_axis_y,servo_holder_base_z])
+					cube([servo_holder_w, servo_holder_l, servo_holder_h + 0.01]);
+			}
+		}
+		
+		// holes for servo wires
 	}
 
 	// servo holders
 	for (i=[0:5])
 	{
-		a = 360 / 6 * i;
-		v = [cos(a) * body_r_axes, sin(a) * body_r_axes, -servo_holder_base_z];
-		translate(v)
+		servo_holder_position(i)
 		{
-			rotate([0,0,a + 90])
+			union()
 			{
-				union()
+				// servo holder
+				servo_holder(with_bevel=true, bevel_back=false, bevel_bottom=false);
+				
+				translate([-servo_holder_w/2, servo_holder_axis_y + servo_holder_l,servo_holder_base_z])
 				{
-					// servo holder
-					servo_holder(with_bevel=true, bevel_back=false);
 					
-					translate([-servo_holder_w/2, servo_holder_axis_y + servo_holder_l,servo_holder_base_z])
-					{
-						union()
-						{
-							// attachment block
-							difference()
-							{
-								s = [servo_holder_w, body_servo_holder_attachment_l, servo_holder_h];
-								// attachmen block cube
-								cube(s);
-								// attachment block bevel
-								davel_box_bevel(s, r=bevel_r, front=false, back=false, top=false, $fs=bevel_fs);
-							}
-							
-							// attachment block buttress
-							davel_buttress_pos([servo_holder_w/2,body_servo_holder_attachment_l,base_plate_h], servo_holder_w, [0,1,0],[0,0,1], servo_holder_h - base_plate_h);
-						}
-					}
+					// buttress
+					davel_buttress_pos([servo_holder_w/2,0,base_plate_h], servo_holder_w, [0,1,0],[0,0,1], servo_holder_h - base_plate_h);
 				}
 			}
 		}
@@ -69,9 +62,16 @@ union()
 	translate([20,0,pwm_controller_pillar_h]) pwm_controller_pillars();
 }
 
+module servo_holder_position(index)
+{
+	a = 360 / 6 * index;
+	v = [cos(a) * body_r_axes, sin(a) * body_r_axes, -servo_holder_base_z];
+	translate(v) rotate([0,0,a + 90]) children();
+}
+
 module base_plate()
 {
-	linear_extrude(height = base_plate_h) shell_profile(body_r_bottom);
+	linear_extrude(height = base_plate_h) shell_profile(body_r - body_shell_thickness / 2);
 }
 
 module shell_profile(r)
@@ -79,7 +79,6 @@ module shell_profile(r)
 	a_offset = asin(servo_holder_w/2 / r);
 	step = 360/6;
 	
-	//p = [ for(i=[0:5]) [ cos(360/6 * i)*r, sin(360/6 * i)*r] ];
 	p = [ for(i=[0:5]) each [
 			[ cos(step * i - a_offset)*r, sin(step * i - a_offset)*r],
 			[ cos(step * i + a_offset)*r, sin(step * i + a_offset)*r] ]
