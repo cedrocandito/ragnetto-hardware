@@ -9,7 +9,7 @@ translate([20,0,0]) cable_holder();
 /*
 "with_bevel" is a master switch, the others control single faces.
 */
-module servo_holder(with_bevel = false, bevel_front = true, bevel_back = true, bevel_left = true, bevel_right = true, bevel_bottom = true)
+module servo_holder(with_bevel = false, bevel_front = true, bevel_back = true, bevel_left = true, bevel_right = true, bevel_bottom = true, draw_servo=true)
 {
 	$fa = 1;
 	$fs = 0.2;
@@ -55,7 +55,8 @@ module servo_holder(with_bevel = false, bevel_front = true, bevel_back = true, b
 		}
 	}
 	
-	%SG90();
+	if (draw_servo)
+		%SG90();
 }
 
 
