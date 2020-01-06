@@ -298,3 +298,48 @@ module servo_horn_2d(gap)
 	}
 }
 
+module pwm_controller_pillars()
+{
+	pcb_pillars(
+		pwm_controller_hole_d,
+		pwm_controller_pillar_d_top,
+		pwm_controller_pillar_d_base,
+		pwm_controller_pillar_h,
+		pwm_controller_hole_h,
+		pwm_controller_hole_distance_short,
+		pwm_controller_hole_distance_long,
+		pwm_controller_size_short,
+		pwm_controller_size_long,
+		pwm_controller_h);
+}
+
+
+/* origin is at center of PCB, on ground */
+module pcb_pillars(hole_d, pillar_d, base_d, h, hole_h, hole_distance_x, hole_distance_y, pcb_w, pcb_l, pcb_h)
+{
+	translate([0, 0, h + pcb_h / 2])
+	{
+		%cube([pcb_w, pcb_l, pcb_h], center=true);
+	}
+	
+	translate([-hole_distance_x/2, -hole_distance_y/2, 0])
+		pcb_pillar(hole_d, pillar_d, base_d, h, hole_h);
+	translate([hole_distance_x/2, -hole_distance_y/2, 0])
+		pcb_pillar(hole_d, pillar_d, base_d, h, hole_h);
+	translate([-hole_distance_x/2, hole_distance_y/2, 0])
+		pcb_pillar(hole_d, pillar_d, base_d, h, hole_h);
+	translate([hole_distance_x/2, hole_distance_y/2, 0])
+		pcb_pillar(hole_d, pillar_d, base_d, h, hole_h);
+}
+
+/* origin is centerd on PCB hole */
+module pcb_pillar(hole_d, pillar_d, base_d, h, hole_h)
+{
+	difference()
+	{
+		translate([0,0,]) cylinder(d1=base_d, d2=pillar_d, h=h);
+		translate([0,0,h-hole_h+0.01]) cylinder(d=hole_d, h=hole_h);
+	}
+}
+
+

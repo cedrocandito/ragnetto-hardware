@@ -62,15 +62,30 @@ foot_l = foot_tip_ball_d/2;
 lower_leg_beam_thickness = 5;
 lower_leg_side_space = 3;
 
-pwm_controller_size_short = 22.35;
+pwm_controller_size_short = 27.3;
 pwm_controller_size_long =  62.23;
+pwm_controller_h = 20;
+pwm_controller_pos = [-20, 0, 0];	// the second one is mirror
+pwm_controller_rotation = [0,0,0];
 pwm_controller_hole_d = 3;
+pwm_controller_hole_h = 13;
 pwm_controller_hole_distance_short = 19.05;
 pwm_controller_hole_distance_long = 55.88;
-pwm_controller_hole_h = 13;
 pwm_controller_pillar_h = 15;
 pwm_controller_pillar_d_top = 5;
-pwm_controller_pillar_d_base = 8;
+pwm_controller_pillar_d_base = 10;
+
+arduino_size_long = 44;
+arduino_size_short = 18;
+arduino_pos = [9,0,-22];
+arduino_rotation = [0,0,0];
+arduino_hole_d = 1.6;
+arduino_hole_h = 10;
+arduino_hole_distance_short = 15.10;
+arduino_hole_distance_long = 40.64;
+arduino_pillar_h = 15;
+arduino_pillar_d_top = 4.5;
+arduino_pillar_d_base = 4.5;
 
 bevel_r = 2;
 bevel_fs = 0.3;
