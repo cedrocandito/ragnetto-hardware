@@ -68,7 +68,7 @@ lower_body_h = 15;
 upper_body_h = total_body_h - lower_body_h;
 upper_body_dome_r = 50;
 base_plate_h = servo_holder_wall_size_bottom;
-body_shell_thickness = 2;
+body_shell_thickness = 1.2;
 body_wedge_gap = 0.3;
 body_cable_hole_d = sg90_connector_w + 1;
 
@@ -89,10 +89,10 @@ arduino_size_short = 18;
 arduino_h = 8;
 arduino_pos = [0,25,0];
 arduino_hole_d = 1.6;
-arduino_hole_h = 8;
+arduino_hole_h = 7;
 arduino_hole_distance_short = 15.10;
 arduino_hole_distance_long = 40.64;
-arduino_pillar_h = 10;
+arduino_pillar_h = 8;
 arduino_pillar_d_top = 4.5;
 arduino_pillar_d_base = 9;
 
