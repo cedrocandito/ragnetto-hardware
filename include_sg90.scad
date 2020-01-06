@@ -22,6 +22,9 @@ sg90_cable_w = 3.5;
 sg90_cable_h = 1;
 sg90_cable_l = 2;
 sg90_mount_screw_h = 9;
+sg90_connector_w = 7.6;
+sg90_connector_l = 14;
+sg90_connector_h = 2.6;
 
 sg90_body_offset_x_from_axis = -sg90_main_w/2;
 sg90_body_offset_y_from_axis = -sg90_tower_d/2;
