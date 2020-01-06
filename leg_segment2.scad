@@ -57,7 +57,7 @@ union()
 							{
 								$fs = bevel_fs;
 								$fa = 1;
-								translate(hole_pos) davel_cube_buttress(hole_size, r=bevel_r, left=false, right=false);
+								translate(hole_pos) davel_box_buttress(hole_size, r=bevel_r, left=false, right=false);
 							}
 						}
 					}

@@ -49,7 +49,7 @@ module servo_holder(with_bevel = false, bevel_front = true, bevel_back = true, b
 			
 			translate([servo_holder_axis_x, servo_holder_axis_y, -servo_holder_base_h + bevel_z])
 			{
-				davel_cube_bevel(
+				davel_box_bevel(
 					[servo_holder_w, servo_holder_l, bevel_h], r=bevel_r, top = false, front=bevel_front, back=bevel_back, left = bevel_left, right=bevel_right, bottom=bevel_bottom, $fs = 0.3);
 			}
 		}
@@ -216,13 +216,13 @@ module cable_holder()
 					cube([cable_holder_hole_thickness+0.02, cable_holder_w+0.02, cable_holder_hole_l]);
 				
 				// outer bevel
-				davel_cube_bevel([tot_thickness, cable_holder_w, cable_holder_l], r=cable_holder_thickness, left=false, front=false, back= false, $fs = 0.1);
+				davel_box_bevel([tot_thickness, cable_holder_w, cable_holder_l], r=cable_holder_thickness, left=false, front=false, back= false, $fs = 0.1);
 			}
 			
 			// hole buttresses
 			translate([0,0, (cable_holder_l - cable_holder_hole_l) / 2])
 			{
-				davel_cube_buttress([cable_holder_hole_thickness, cable_holder_w, cable_holder_hole_l], r=cable_holder_thickness / 2, left=false, front=false, back= false, $fs = 0.1);
+				davel_box_buttress([cable_holder_hole_thickness, cable_holder_w, cable_holder_hole_l], r=cable_holder_thickness / 2, left=false, front=false, back= false, $fs = 0.1);
 			}
 		}
 	}

@@ -52,7 +52,7 @@ union()
 								// attachmen block cube
 								cube(s);
 								// attachment block bevel
-								davel_cube_bevel(s, r=bevel_r, front=false, back=false, top=false, $fs=bevel_fs);
+								davel_box_bevel(s, r=bevel_r, front=false, back=false, top=false, $fs=bevel_fs);
 							}
 							
 							// attachment block buttress
