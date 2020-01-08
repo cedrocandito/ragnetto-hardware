@@ -5,6 +5,7 @@ use <davel/davel.scad>
 servo_holder(with_bevel=true);
 joint_arm(servo_arm_extra_dist=servo_arm_extra_dist_min, with_screw_holes=true);
 translate([20,0,0]) cable_holder();
+translate([-120,0,0]) {lower_body_shell(); upper_body_shell(); }
 
 /*
 "with_bevel" is a master switch, the others control single faces.
@@ -230,6 +231,97 @@ module cable_holder()
 }
 
 
+module lower_body_shell()
+{
+	union()
+	{
+		// base
+		difference()
+		{
+			linear_extrude(height = base_plate_h) body_shell_profile(body_r - body_shell_thickness / 2);
+			
+			// battery strap slits
+			for (i=[-1,1])
+			{
+				translate([body_battery_strap_slit_x * i, 0, base_plate_h/2])
+				{
+					#cube([body_battery_strap_slit_w, body_battery_strap_slit_l, base_plate_h + 0.02], center=true);
+				}
+			}
+		}
+		
+		// walls
+		difference()
+		{
+			// wall
+			linear_extrude(height=lower_body_h) body_shell_profile(body_r);
+			// inside cavity
+			linear_extrude(height=lower_body_h + 0.01 ) body_shell_profile(body_r - body_shell_thickness);
+			
+			// holes in the wall so the body doesn't fill the holder screw holes
+			body_servo_holder_blocks(0);
+			
+			// holes for servo wires
+			body_cable_holes();
+		}
+
+		// servo holders
+		for (i=[0:5])
+		{
+			body_servo_holder_position(i)
+			{
+				union()
+				{
+					// servo holder
+					mirror_or_not([1,0,0], i>=3)
+					{
+						servo_holder(with_bevel=true, bevel_back=false, bevel_bottom=false, draw_servo=false);
+					}
+					
+					translate([-servo_holder_w/2, servo_holder_axis_y + servo_holder_l,servo_holder_base_z])
+					{
+						// buttress
+						davel_buttress_pos([servo_holder_w/2,0,base_plate_h], servo_holder_w, [0,1,0],[0,0,1], body_servo_holder_buttress_h);
+					}
+				}
+			}
+		}
+
+		// PCB pillars
+		translate([0,0,base_plate_h])
+		{
+			// left PWM controller
+			translate(pwm_controller_pos) pwm_controller_pillars();
+			// right PWM controller
+			mirror([1,0,0]) translate(pwm_controller_pos) pwm_controller_pillars();
+			// arduino nano
+			translate(arduino_pos) arduino_pillars();
+		}
+	}
+}
+
+
+module upper_body_shell()
+{
+	difference()
+	{
+		translate([0,0,lower_body_h]) 
+		{
+			upper_body_dome();
+		}
+		
+		translate([0,0,lower_body_h - 0.01])
+		{
+			scxy = (body_r - body_shell_thickness) / body_r;
+			scz = (upper_body_h - body_shell_thickness) / upper_body_h;
+			scale([scxy, scxy, scz]) upper_body_dome();
+		}
+		
+		body_servo_holder_blocks(body_wedge_gap);
+	}
+}
+
+
 // ----------------------------------------------------------------------------------------
 
 module servo_pillar(with_cable_slit=false)
@@ -315,6 +407,7 @@ module pwm_controller_pillars()
 
 module arduino_pillars()
 {
+	rotate([0,0,90])
 	pcb_pillars(
 		arduino_hole_d,
 		arduino_pillar_d_top,
@@ -357,82 +450,6 @@ module pcb_pillar(hole_d, pillar_d, base_d, h, hole_h)
 	}
 }
 
-module lower_body_shell()
-{
-	union()
-	{
-		// base
-		linear_extrude(height = base_plate_h) body_shell_profile(body_r - body_shell_thickness / 2);
-		
-		// walls
-		difference()
-		{
-			// wall
-			linear_extrude(height=lower_body_h) body_shell_profile(body_r);
-			// inside cavity
-			linear_extrude(height=lower_body_h + 0.01 ) body_shell_profile(body_r - body_shell_thickness);
-			
-			// holes in the wall so the body doesn't fill the holder screw holes
-			body_servo_holder_blocks(0);
-			
-			// holes for servo wires
-			body_cable_holes();
-		}
-
-		// servo holders
-		for (i=[0:5])
-		{
-			body_servo_holder_position(i)
-			{
-				union()
-				{
-					// servo holder
-					mirror_or_not([1,0,0], i>=3)
-					{
-						servo_holder(with_bevel=true, bevel_back=false, bevel_bottom=false, draw_servo=false);
-					}
-					
-					translate([-servo_holder_w/2, servo_holder_axis_y + servo_holder_l,servo_holder_base_z])
-					{
-						// buttress
-						davel_buttress_pos([servo_holder_w/2,0,base_plate_h], servo_holder_w, [0,1,0],[0,0,1], servo_holder_h - base_plate_h);
-					}
-				}
-			}
-		}
-
-		// PCB pillars
-		translate([0,0,base_plate_h])
-		{
-			// left PWM controller
-			translate(pwm_controller_pos) pwm_controller_pillars();
-			// right PWM controller
-			mirror([1,0,0]) translate(pwm_controller_pos) pwm_controller_pillars();
-			// arduino nano
-			translate(arduino_pos) arduino_pillars();
-		}
-	}
-}
-
-module upper_body_shell()
-{
-	difference()
-	{
-		translate([0,0,lower_body_h]) 
-		{
-			upper_body_dome();
-		}
-		
-		translate([0,0,lower_body_h - 0.01])
-		{
-			scxy = (body_r - body_shell_thickness) / body_r;
-			scz = (upper_body_h - body_shell_thickness) / upper_body_h;
-			scale([scxy, scxy, scz]) upper_body_dome();
-		}
-		
-		body_servo_holder_blocks(body_wedge_gap);
-	}
-}
 
 module upper_body_dome()
 {
@@ -472,12 +489,12 @@ module body_servo_holder_blocks(gap)
 		{
 			translate([-servo_holder_w/2 - gap, servo_holder_axis_y - gap,servo_holder_base_z - gap])
 			{
-				cube([servo_holder_w + gap*2, servo_holder_l + gap*2, servo_holder_h*2]);
+				cube([servo_holder_w + gap*2, servo_holder_l + gap*2, servo_holder_h + sg90_ledge_h + body_servo_holder_ledge_extra_h]);
 				
 				// buttress
 				translate([servo_holder_w/2+gap,servo_holder_l + gap*2, base_plate_h + gap])
 				{
-					davel_buttress(servo_holder_w + gap*2, [0,1,0],[0,0,1], servo_holder_h - base_plate_h);
+					davel_buttress(servo_holder_w + gap*2, [0,1,0],[0,0,1], body_servo_holder_buttress_h);
 				}
 			}
 		}
