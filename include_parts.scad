@@ -5,7 +5,7 @@ use <davel/davel.scad>
 servo_holder(with_bevel=true);
 joint_arm(servo_arm_extra_dist=servo_arm_extra_dist_min, with_screw_holes=true);
 translate([20,0,0]) cable_holder();
-translate([-120,0,0]) {lower_body_shell(); upper_body_shell(); }
+translate([-120,0,0]) {*lower_body_shell(); upper_body_shell(); }
 
 /*
 "with_bevel" is a master switch, the others control single faces.
@@ -245,7 +245,7 @@ module lower_body_shell()
 			{
 				translate([body_battery_strap_slit_x * i, 0, base_plate_h/2])
 				{
-					#cube([body_battery_strap_slit_w, body_battery_strap_slit_l, base_plate_h + 0.02], center=true);
+					cube([body_battery_strap_slit_w, body_battery_strap_slit_l, base_plate_h + 0.02], center=true);
 				}
 			}
 		}
@@ -263,6 +263,11 @@ module lower_body_shell()
 			
 			// holes for servo wires
 			body_cable_holes();
+			
+			// hole for on/off switch
+			translate([0, -body_r, (lower_body_h -  base_plate_h)/2 + base_plate_h])
+				rotate([90,0,0])
+					cylinder(d=body_switch_hole_d, h=body_r, center=true);
 		}
 
 		// servo holders
@@ -286,6 +291,24 @@ module lower_body_shell()
 				}
 			}
 		}
+		
+		// screw pillars
+		for (a=[0:120:240])
+		{
+			screw_hole_position(body_r, a)
+			{
+				difference()
+				{
+					// column					
+					screw_hole_pillar(d=body_screw_column_d, h=lower_body_h, x = body_screw_hole_x);
+				
+					// hole
+					translate([0,0,lower_body_h - body_screw_hole_h])
+						cylinder(d=body_screw_hole_d, h = body_screw_hole_h + 0.01);
+				}
+			}			
+		}
+		
 
 		// PCB pillars
 		translate([0,0,base_plate_h])
@@ -305,24 +328,93 @@ module upper_body_shell()
 {
 	difference()
 	{
-		translate([0,0,lower_body_h]) 
+		union()
 		{
-			upper_body_dome();
+			difference()
+			{
+				// shell
+				translate([0,0,lower_body_h])
+				{
+					upper_body_dome();
+				}
+				
+				// internal cavity
+				translate([0,0,lower_body_h - 0.01])
+				{
+					scxy = (body_r - body_shell_thickness) / body_r;
+					scz = (upper_body_h - body_shell_thickness) / upper_body_h;
+					scale([scxy, scxy, scz]) upper_body_dome();
+				}
+				
+				// rectangular holes corresponding to the servo holder positions
+				body_servo_holder_blocks(body_wedge_gap);
+			}
+			
+			// screw hole pillars
+			translate([0,0,lower_body_h])
+			{
+				intersection()
+				{
+					for (a=[0:120:240])
+					{
+						screw_hole_position(body_r, a)
+						{
+							difference()
+							{
+								union()
+								{
+									// platform
+									screw_hole_pillar(d=body_screw_column_d, h=body_screw_hole_platform_h, x = body_screw_hole_x);
+									
+									// wall around the hole above
+									translate([0,0,body_screw_hole_platform_h])
+									{
+										screw_hole_pillar(d=body_screw_column_d, h=upper_body_h - body_screw_hole_platform_h + 0.01, x = body_screw_hole_x);
+									}
+								}
+								
+								// hole
+								translate([0,0, -0.01])
+									cylinder(d=body_screw_hole_d, h = body_screw_hole_platform_h + 0.02);
+							}
+						}			
+					}
+					
+					upper_body_dome();
+					
+				}
+			}
 		}
 		
-		translate([0,0,lower_body_h - 0.01])
+		// empty column above screws
+		for (a=[0:120:240])
 		{
-			scxy = (body_r - body_shell_thickness) / body_r;
-			scz = (upper_body_h - body_shell_thickness) / upper_body_h;
-			scale([scxy, scxy, scz]) upper_body_dome();
+			screw_hole_position(body_r, a)
+			{
+				translate([0,0, lower_body_h + body_screw_hole_platform_h])
+				{
+					screw_hole_pillar(d=body_screw_head_d, h=upper_body_h - body_screw_hole_platform_h, x = body_screw_hole_x);
+				}
+			}
 		}
-		
-		body_servo_holder_blocks(body_wedge_gap);
 	}
 }
 
 
 // ----------------------------------------------------------------------------------------
+
+function hex_side_r(r) = cos(30 - asin(servo_holder_w/2 / r)) * r;
+
+module screw_hole_position(r, a)
+{
+	rotate([0,0,a]) translate([0, hex_side_r(r) - body_screw_hole_x, 0]) children();
+}
+
+module screw_hole_pillar(d,h,x)
+{
+	cylinder(d=d, h=h);
+	translate([0, x / 2, h / 2]) cube([d, x+0.01, h], center=true);
+}
 
 module servo_pillar(with_cable_slit=false)
 {
@@ -407,7 +499,6 @@ module pwm_controller_pillars()
 
 module arduino_pillars()
 {
-	rotate([0,0,90])
 	pcb_pillars(
 		arduino_hole_d,
 		arduino_pillar_d_top,
@@ -487,6 +578,7 @@ module body_servo_holder_blocks(gap)
 	{
 		body_servo_holder_position(i)
 		{
+
 			translate([-servo_holder_w/2 - gap, servo_holder_axis_y - gap,servo_holder_base_z - gap])
 			{
 				cube([servo_holder_w + gap*2, servo_holder_l + gap*2, servo_holder_h + sg90_ledge_h + body_servo_holder_ledge_extra_h]);
@@ -496,6 +588,13 @@ module body_servo_holder_blocks(gap)
 				{
 					davel_buttress(servo_holder_w + gap*2, [0,1,0],[0,0,1], body_servo_holder_buttress_h);
 				}
+			}
+		
+			// column above screw hole
+			translate([0, sg90_mount_hole_offset_y_from_axis + sg90_mount_hole_dist , 0])
+			{
+				ledge_overhang = (sg90_ledge_l - sg90_main_l)/2;
+				cylinder(d=ledge_overhang, h=total_body_h);
 			}
 		}
 	}
@@ -536,4 +635,8 @@ module body_shell_profile(r)
 	polygon(p);
 }
 
+module body_shell_screw_pillar()
+{
+	cylinder(d=body_screw_colum_d, h=total_body_h);
+}
 

@@ -62,24 +62,29 @@ foot_l = foot_tip_ball_d/2;
 lower_leg_beam_thickness = 5;
 lower_leg_side_space = 3;
 
-body_r_axes = 73;
+body_r_axes = 77;
 total_body_h = 42;
 lower_body_h = 15;
-upper_body_h = total_body_h - lower_body_h;
-upper_body_dome_r = 45;
+upper_body_dome_r = 50;
 base_plate_h = servo_holder_wall_size_bottom;
 body_shell_thickness = 1;
 body_wedge_gap = 0.3;
 body_cable_hole_d = sg90_connector_w + 1;
-body_battery_strap_slit_l = 30;
+body_battery_strap_slit_l = 25;
 body_battery_strap_slit_w = 7;
 body_battery_strap_slit_x = 25;
 body_servo_holder_ledge_extra_h = 0.5;
+body_switch_hole_d = 6.5;
+body_screw_hole_h = 20;
+body_screw_hole_d = 3;
+body_screw_head_d = 5;
+body_screw_hole_platform_h = 2;
+body_screw_column_d = 7;
 
 pwm_controller_size_short = 27.3;
 pwm_controller_size_long =  62.23;
 pwm_controller_h = 20;
-pwm_controller_pos = [-15, -8, 0];	// the second one is mirror
+pwm_controller_pos = [-24, 0, 0];	// the second one is mirror
 pwm_controller_hole_d = 2.5;	// technically it's 3, but the head of a 3 screw will be blocked by the PCB headers.
 pwm_controller_hole_h = 10;
 pwm_controller_hole_distance_short = 19.05;
@@ -91,14 +96,14 @@ pwm_controller_pillar_d_base = 9;
 arduino_size_long = 44;
 arduino_size_short = 18;
 arduino_h = 8;
-arduino_pos = [0,35,0];
+arduino_pos = [0,5,0];
 arduino_hole_d = 1.6;
 arduino_hole_h = 10;
 arduino_hole_distance_short = 15.10;
 arduino_hole_distance_long = 40.64;
 arduino_pillar_h = 12;
 arduino_pillar_d_top = 4.5;
-arduino_pillar_d_base = 9;
+arduino_pillar_d_base = 10;
 
 bevel_r = 2;
 bevel_fs = 0.3;
@@ -126,7 +131,8 @@ servo_arm_h_out = servo_arm_h_in + servo_arm_thickness * 2;
 cable_holder_l =servo_holder_w;
 body_r = body_r_axes - servo_holder_axis_y - servo_holder_l + servo_holder_pillar_l;
 body_servo_holder_buttress_h = (servo_holder_h - base_plate_h)/2;
-
+upper_body_h = total_body_h - lower_body_h;
+body_screw_hole_x = body_screw_column_d / 2;
 
 
 // ---------------- assertions --------------------
