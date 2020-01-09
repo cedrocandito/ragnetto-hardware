@@ -31,7 +31,7 @@ union()
 
 module leg(w, l, h, bevel=bevel_r, foot_with_ball_tip = false)
 {
-	lb = l - foot_l;
+	lb = l - foot_l - (foot_with_ball_tip ? foot_tip_ball_offset : 0);
 	foot_tip_pos = [0, -lb, -(h - foot_h)/2];
 	
 	union()
@@ -77,7 +77,7 @@ module leg(w, l, h, bevel=bevel_r, foot_with_ball_tip = false)
 		
 		if (foot_with_ball_tip)
 		{
-			translate(foot_tip_pos)
+			translate(foot_tip_pos - [0, foot_tip_ball_offset, 0])
 			{
 				sphere(d=foot_tip_ball_d);
 			}

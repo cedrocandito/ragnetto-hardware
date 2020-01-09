@@ -51,12 +51,13 @@ cable_holder_hole_thickness = 3.5;
 cable_holder_hole_l = 11;
 cable_holder_w = 4;
 
-leg_segment2_l = 60;	// distance between axes
-leg_segment3_l = 60; // distance between axis and tip
-foot_with_ball_tip = false;
+leg_segment2_l = 70;	// distance between axes
+leg_segment3_l = 70; // distance between axis and tip
+foot_with_ball_tip = true;
 foot_w = 7;
 foot_h = 7;
 foot_tip_ball_d = min(foot_w, foot_h);
+foot_tip_ball_offset = foot_tip_ball_d * 0.2;
 foot_tip_hole_d = 5;
 foot_l = foot_tip_ball_d/2;
 lower_leg_beam_thickness = 5;
