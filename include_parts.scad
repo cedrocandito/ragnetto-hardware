@@ -451,8 +451,19 @@ module servo_pillar(with_cable_slit=false)
 
 module servo_horn(height=1.35, gap=0.2)
 {
-	linear_extrude(height=height)
-		servo_horn_2d(gap);
+	union()
+	{
+		linear_extrude(height=height)
+			servo_horn_2d(gap);
+		// skip first and last hole: too near to borders
+		for (i=[1:4])
+		{
+			translate([0, -servo_horn_first_mini_hole_distance - i * servo_horn_mini_hole_distance, -servo_horn_mini_hole_h+0.01])
+			{
+				cylinder(d=servo_horn_mini_hole_d, h = servo_horn_mini_hole_h, $fs = 0.1);
+			}
+		}
+	}
 }
 
 
