@@ -299,7 +299,7 @@ module lower_body_shell()
 		}
 		
 		// screw pillars
-		for (a=[0:60:300])
+		for (a=body_screw_sides)
 		{
 			screw_hole_position(body_r, a)
 			{
@@ -369,7 +369,7 @@ module upper_body_shell()
 			{
 				intersection()
 				{
-					for (a=[0:60:300])
+					for (a=body_screw_sides)
 					{
 						screw_hole_position(body_r, a)
 						{
@@ -396,7 +396,7 @@ module upper_body_shell()
 			}
 		}
 		
-		for (a=[0:60:300])
+		for (a=body_screw_sides)
 		{
 			screw_hole_position(body_r, a)
 			{

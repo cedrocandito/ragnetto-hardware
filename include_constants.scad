@@ -87,6 +87,7 @@ body_screw_hole_d = 3;
 body_screw_head_d = 5;
 body_screw_hole_platform_h = 2;
 body_screw_column_d = 7;
+body_screw_sides = [0, 60, 120, 240, 300];
 
 pwm_controller_size_short = 27.3;
 pwm_controller_size_long =  62.23;
