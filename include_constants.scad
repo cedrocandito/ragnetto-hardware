@@ -1,12 +1,14 @@
 include <include_sg90.scad>
 
+
 servo_holder_gap_bottom = 0;
+servo_holder_pillar_h = sg90_ledge_z + servo_holder_gap_bottom;
 servo_holder_gap_side= 0.4;
 servo_holder_wall_size_bottom = 3;
-servo_holder_wall_size_side = 1;
+servo_holder_wall_size_side = 1.2;
 servo_holder_hole_extra = 2;
 servo_holder_mount_hole_d = 2;
-servo_holder_wall_h = 10;
+servo_holder_wall_h = servo_holder_pillar_h;
 servo_holder_cable_extra_room = 2.5;
 servo_holder_cable_extra_room_r = 10;
 
@@ -67,12 +69,12 @@ foot_l = foot_tip_ball_d/2;
 lower_leg_beam_thickness = 5;
 lower_leg_side_space = 3;
 
-body_r_axes = 77;
+lower_body_h = servo_holder_pillar_h + servo_holder_wall_size_bottom;
+body_r_axes = 80;
 total_body_h = 42;
-lower_body_h = 15;
-upper_body_dome_r = 50;
-base_plate_h = servo_holder_wall_size_bottom;
-body_shell_thickness = 1;
+upper_body_dome_r = 55;
+base_plate_h = 2;
+body_shell_thickness = 1.2;
 body_wedge_gap = 0.3;
 body_cable_hole_d = sg90_connector_w + 1;
 body_battery_strap_slit_l = 25;
@@ -97,6 +99,7 @@ pwm_controller_hole_distance_long = 55.88;
 pwm_controller_pillar_h = 12;
 pwm_controller_pillar_d_top = 5;
 pwm_controller_pillar_d_base = 9;
+pwm_controller_offset = 13;
 
 arduino_size_long = 44;
 arduino_size_short = 18;
@@ -106,7 +109,7 @@ arduino_hole_d = 1.6;
 arduino_hole_h = 10;
 arduino_hole_distance_short = 15.10;
 arduino_hole_distance_long = 40.64;
-arduino_pillar_h = 12;
+arduino_pillar_h = 25;
 arduino_pillar_d_top = 4.5;
 arduino_pillar_d_base = 10;
 
@@ -124,7 +127,7 @@ servo_holder_w = sg90_main_w + servo_holder_gap_side * 2 + servo_holder_wall_siz
 servo_holder_l = sg90_main_l + servo_holder_gap_side * 2 + servo_holder_pillar_l * 2;
 servo_holder_base_h = servo_holder_wall_size_bottom;
 servo_holder_axis_x = -servo_holder_w / 2;
-servo_holder_axis_y = -(sg90_main_l - sg90_main_l)/2 - sg90_tower_d/2 - servo_holder_gap_side - servo_holder_pillar_l;
+servo_holder_axis_y = -sg90_tower_d/2 - servo_holder_gap_side - servo_holder_pillar_l;
 servo_holder_h = servo_holder_wall_size_bottom + servo_holder_gap_bottom + sg90_ledge_z;
 servo_holder_base_z = -servo_holder_gap_bottom - servo_holder_wall_size_bottom;
 
@@ -134,7 +137,7 @@ servo_arm_axis_to_base = -servo_holder_gap_bottom - servo_holder_wall_size_botto
 servo_arm_h_in = shaft_base2_extra_h + servo_holder_wall_size_bottom + servo_holder_gap_bottom + sg90_main_h + sg90_tower_h + sg90_hub_with_horn_h - servo_arm_thickness;
 servo_arm_h_out = servo_arm_h_in + servo_arm_thickness * 2;
 cable_holder_l =servo_holder_w;
-body_r = body_r_axes - servo_holder_axis_y - servo_holder_l + servo_holder_pillar_l;
+body_r = body_r_axes - servo_holder_w / 2;
 body_servo_holder_buttress_h = (servo_holder_h - base_plate_h)/2;
 upper_body_h = total_body_h - lower_body_h;
 body_screw_hole_x = body_screw_column_d / 2;
