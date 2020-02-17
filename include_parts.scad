@@ -5,7 +5,7 @@ use <davel/davel.scad>
 servo_holder(with_bevel=true);
 joint_arm(servo_arm_extra_dist=servo_arm_extra_dist_min, with_screw_holes=true);
 translate([20,0,0]) cable_holder();
-translate([-120,0,0]) {lower_body_shell(); *upper_body_shell(); }
+translate([-120,0,0]) { lower_body_shell(); *upper_body_shell(); }
 
 /*
 "with_bevel" is a master switch, the others control single faces.
@@ -72,7 +72,6 @@ module joint_arm(servo_arm_extra_dist, with_top_bevel=true, with_bottom_bevel=tr
 	bracket_dist = f_servo_arm_bracket_dist(servo_arm_extra_dist);
 	l = bracket_dist + servo_arm_bracket_size + w/2;
 	square_l = l - w / 2;
-	shaft_hole_gap = 0.5;
 	top_arm_passage_width = sg90_hub_d + servo_arm_passage_extra_w;
 	ring_h = sg90_hub_with_horn_h - servo_arm_thickness - servo_arm_servo_shaft_ring_gap;
 	
@@ -190,16 +189,16 @@ module shaft()
 	$fs = shaft_fs;
 	
 	// square base
-	translate([-shaft_base1_l / 2 + shaft_gap, -shaft_base1_l / 2 + shaft_gap, 0])
-		cube([shaft_base1_l - shaft_gap * 2, shaft_base1_l - shaft_gap * 2, shaft_base1_h]);
+	translate([-shaft_base1_l / 2 + shaft_base_gap, -shaft_base1_l / 2 + shaft_base_gap, 0])
+		cube([shaft_base1_l - shaft_base_gap * 2, shaft_base1_l - shaft_base_gap * 2, shaft_base1_h]);
 
 	// round base
 	translate([0, 0, shaft_base1_h])
-		cylinder(d=shaft_base2_d - shaft_gap * 2, h=shaft_base2_h + shaft_base2_extra_h);
+		cylinder(d=shaft_base2_d - shaft_base_gap * 2, h=shaft_base2_h + shaft_base2_extra_h);
 	
 	// shaft
 	translate([0, 0, shaft_base1_h + shaft_base2_h + shaft_base2_extra_h])
-		cylinder(d=shaft_d - shaft_gap * 2, h=shaft_h);
+		cylinder(d=shaft_d - shaft_cylinder_gap * 2, h=shaft_h);
 }
 
 
