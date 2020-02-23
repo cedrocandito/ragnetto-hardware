@@ -10,7 +10,7 @@ translate([-120,0,0]) { lower_body_shell(); *upper_body_shell(); }
 /*
 "with_bevel" is a master switch, the others control single faces.
 */
-module servo_holder(with_bevel = false, bevel_front = true, bevel_back = true, bevel_left = true, bevel_right = true, bevel_bottom = true, draw_servo=true)
+module servo_holder(with_bevel = false, bevel_front = true, bevel_back = true, bevel_left = true, bevel_right = true, bevel_bottom = true, with_right_wall = false, draw_servo = true)
 {
 	$fa = 1;
 	$fs = 0.2;
@@ -33,8 +33,11 @@ module servo_holder(with_bevel = false, bevel_front = true, bevel_back = true, b
 			// side wall
 			translate([servo_holder_axis_x, servo_holder_axis_y, -servo_holder_gap_bottom])
 				cube([servo_holder_wall_size_side, servo_holder_l, servo_holder_wall_h]);
-			translate([-servo_holder_axis_x - servo_holder_wall_size_side, servo_holder_axis_y + servo_holder_l/2, -servo_holder_gap_bottom])
+			if (with_right_wall)
+			{
+				translate([-servo_holder_axis_x - servo_holder_wall_size_side, servo_holder_axis_y + servo_holder_l/2, -servo_holder_gap_bottom])
 				cube([servo_holder_wall_size_side, servo_holder_l/2, servo_holder_wall_h]);
+			}
 		}
 
 		// bottom shaft hole
@@ -285,7 +288,7 @@ module lower_body_shell()
 					// servo holder
 					mirror_or_not([1,0,0], i<3)
 					{
-						servo_holder(with_bevel=true, bevel_back=false, bevel_bottom=false, draw_servo=false);
+						servo_holder(with_bevel=true, bevel_back=false, bevel_bottom=false, draw_servo=false, with_right_wall=true);
 						
 						translate([-servo_holder_w/2, servo_holder_axis_y + servo_holder_l,servo_holder_base_z])
 						{
