@@ -35,8 +35,8 @@ module servo_holder(with_bevel = false, bevel_front = true, bevel_back = true, b
 				cube([servo_holder_wall_size_side, servo_holder_l, servo_holder_wall_h]);
 			if (with_right_wall)
 			{
-				translate([-servo_holder_axis_x - servo_holder_wall_size_side, servo_holder_axis_y + servo_holder_l/2, -servo_holder_gap_bottom])
-				cube([servo_holder_wall_size_side, servo_holder_l/2, servo_holder_wall_h]);
+				translate([-servo_holder_axis_x - servo_holder_wall_size_side, servo_holder_axis_y + servo_holder_l - servo_holder_right_wall_l, -servo_holder_gap_bottom])
+				cube([servo_holder_wall_size_side,  servo_holder_right_wall_l, servo_holder_wall_h]);
 			}
 		}
 
@@ -286,7 +286,7 @@ module lower_body_shell()
 				union()
 				{
 					// servo holder
-					mirror_or_not([1,0,0], i<3)
+					mirror_or_not([1,0,0], i>=3)
 					{
 						servo_holder(with_bevel=true, bevel_back=false, bevel_bottom=false, draw_servo=false, with_right_wall=true);
 						
@@ -471,8 +471,8 @@ module servo_horn(height=1.35, gap=0.2)
 	{
 		linear_extrude(height=height)
 			servo_horn_2d(gap);
-		// skip first and last hole: too near to borders
-		for (i=[1:4])
+		// skip first hole: too near to borders
+		for (i=[1:5])
 		{
 			translate([0, -servo_horn_first_mini_hole_distance - i * servo_horn_mini_hole_distance, -servo_horn_mini_hole_h+0.01])
 			{
