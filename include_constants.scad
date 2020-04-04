@@ -14,14 +14,14 @@ servo_holder_cable_extra_room_r = 10;
 servo_holder_right_wall_l = 14;
 
 servo_arm_bracket_size = 4;
-servo_arm_extra_dist_min = 3;	// 0 is the minimal non-touching distance
+servo_arm_extra_dist_min = 4;	// 0 is the minimal non-touching distance
 servo_arm_extra_dist_max = 13;
-servo_arm_thickness = 3.5;
+servo_arm_thickness = 4;
 servo_arm_servo_shaft_ring_thickness = 2;
 servo_arm_servo_shaft_ring_gap = 0.0;	// to allow better movement
 servo_arm_passage_angle = 90;
 servo_arm_passage_extra_w = 0.5; // 0 is exactly the size of the servo shaft
-servo_horn_rim = 0.2;
+servo_horn_rim = 0.2;	// gap between horn and joint arm
 servo_arm_extra_horn_depth = 0.3;
 servo_arm_horn_bridge_coverage = 1.5;
 servo_arm_horn_bridge_h = 1;
@@ -44,15 +44,6 @@ shaft_fa = 1;
 shaft_fs = 0.1;
 shaft_base_gap = 0.2;	// 0.2 when fast, 0.1 when slow and precise
 shaft_cylinder_gap = 0.1;
-
-servo_horn_hub_d = 6.9;
-servo_horn_total_l = 19.6;
-servo_horn_arm_w_min = 3.9;
-servo_horn_arm_w_max = 5.6;
-servo_horn_first_mini_hole_distance = 4.3;
-servo_horn_mini_hole_distance = 2;
-servo_horn_mini_hole_d = 1;
-servo_horn_mini_hole_h = 5;
 
 cable_holder_thickness = 2.5;
 cable_holder_hole_thickness = 3.5;

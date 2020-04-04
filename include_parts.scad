@@ -66,7 +66,7 @@ module servo_holder(with_bevel = false, bevel_front = true, bevel_back = true, b
 }
 
 
-module joint_arm(servo_arm_extra_dist, with_top_bevel=true, with_bottom_bevel=true, with_buttress=true, with_screw_holes=true)
+module joint_arm(servo_arm_extra_dist, with_top_bevel=true, with_bottom_bevel=true, with_buttress=true, with_screw_holes=true, with_horn_cover=false)
 {
 	$fa = 1;
 	$fs = 0.2;
@@ -103,12 +103,15 @@ module joint_arm(servo_arm_extra_dist, with_top_bevel=true, with_bottom_bevel=tr
 					cylinder(d = w, h = servo_arm_thickness);
 				}
 				
-				// top arm horn bridge (to keep the horn tip down)
-				horn_l = servo_horn_total_l - servo_horn_hub_d / 2;
-				servo_arm_horn_bridge_l = square_l - horn_l - servo_horn_rim + servo_arm_horn_bridge_coverage;
-				assert(servo_arm_horn_bridge_l > 0);
-				translate([-w/2, -square_l, servo_arm_h_out])
-					cube([w, servo_arm_horn_bridge_l, servo_arm_horn_bridge_h]);
+				if (with_horn_cover)
+				{
+					// top arm horn cover (to keep the horn tip down)
+					horn_l = servo_horn_total_l - servo_horn_hub_d / 2;
+					servo_arm_horn_bridge_l = square_l - horn_l - servo_horn_rim + servo_arm_horn_bridge_coverage;
+					assert(servo_arm_horn_bridge_l > 0);
+					translate([-w/2, -square_l, servo_arm_h_out])
+						cube([w, servo_arm_horn_bridge_l, servo_arm_horn_bridge_h]);
+				}
 				
 				// buttresses
 				if (with_buttress)
@@ -124,24 +127,22 @@ module joint_arm(servo_arm_extra_dist, with_top_bevel=true, with_bottom_bevel=tr
 				// top arm shaft ring
 				translate([0, 0, servo_arm_h_in + servo_arm_thickness - ring_h])
 				{
-					difference()
-					{
-						cylinder(d=servo_horn_hub_d + servo_horn_rim * 2 + servo_arm_servo_shaft_ring_thickness * 2, h=ring_h + 0.01);
-						cylinder(d=servo_horn_hub_d + servo_horn_rim * 2 , h=ring_h + 0.01);						
-					}
+					cylinder(d=servo_horn_hub_d + servo_horn_rim * 2 + servo_arm_servo_shaft_ring_thickness * 2, h=ring_h + 0.01);
 				}
 			}
+			
+			// ----- the following are subtracted -----
 			
 			// space for horn
 			translate([0,0,servo_arm_h_out - sg90_horn_h - servo_arm_extra_horn_depth])
 			{
-				servo_horn(sg90_horn_h + servo_arm_extra_horn_depth + 0.01, servo_horn_rim);	
+				servo_horn(sg90_horn_h + servo_arm_extra_horn_depth + 0.01, servo_horn_rim, skip_inner_holes=1);	
 			}
 			
 			// horn hub
-			translate([0,0,servo_arm_h_out - servo_arm_thickness - 0.01])
+			translate([0,0,servo_arm_h_out - servo_arm_thickness - ring_h - 0.01])
 			{
-				cylinder(d = servo_horn_hub_d + servo_horn_rim * 2, h = servo_arm_thickness + 0.01);
+				cylinder(d = servo_horn_hub_d + servo_horn_rim * 2, h = servo_arm_thickness + ring_h + 0.02);
 			}
 			
 			// passage for servo shaft in top arm
@@ -179,7 +180,7 @@ module joint_arm(servo_arm_extra_dist, with_top_bevel=true, with_bottom_bevel=tr
 				if (with_bottom_bevel)
 					davel_bevel_pos([0,0,0], w, [0,0,-1], [0,-1,0], bevel_r * 2.5);
 				if (with_top_bevel)
-					davel_bevel_pos([0,0,servo_arm_h_out + servo_arm_horn_bridge_h], w, [0,0,1], [0,-1,0], bevel_r * 2.5);
+					davel_bevel_pos([0,0,servo_arm_h_out + (with_horn_cover ? servo_arm_horn_bridge_h : 0)], w, [0,0,1], [0,-1,0], bevel_r * 2.5);
 			}
 		}
 	}
@@ -465,18 +466,28 @@ module servo_pillar(with_cable_slit=false)
 	}
 }
 
-module servo_horn(height=1.35, gap=0.2)
+module servo_horn(height=sg90_horn_h, gap=0.2, skip_inner_holes = 0, skip_outer_holes=0)
 {
 	union()
 	{
 		linear_extrude(height=height)
 			servo_horn_2d(gap);
-		// skip first hole: too near to borders
-		for (i=[1:5])
+		
+		// mini holes
+		for (i=[skip_inner_holes:servo_horn_mini_holes-1-skip_outer_holes])
 		{
 			translate([0, -servo_horn_first_mini_hole_distance - i * servo_horn_mini_hole_distance, -servo_horn_mini_hole_h+0.01])
 			{
 				cylinder(d=servo_horn_mini_hole_d, h = servo_horn_mini_hole_h, $fs = 0.1);
+			}
+		}
+		
+		// medium holes
+		for (idx=servo_horn_medium_holes_indexes)
+		{
+			translate([0, -servo_horn_first_mini_hole_distance - idx * servo_horn_mini_hole_distance, -servo_horn_mini_hole_h+0.01])
+			{
+				cylinder(d=servo_horn_medium_hole_d, h = servo_horn_medium_hole_h, $fs = 0.1);
 			}
 		}
 	}
