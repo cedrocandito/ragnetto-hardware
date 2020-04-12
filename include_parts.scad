@@ -78,7 +78,7 @@ module joint_arm(servo_arm_extra_dist, with_top_bevel=true, with_bottom_bevel=tr
 	top_arm_passage_width = sg90_hub_d + servo_arm_passage_extra_w;
 	ring_h = sg90_hub_with_horn_h - sg90_horn_h + servo_arm_horn_hole_depth - servo_arm_thickness - servo_arm_servo_shaft_ring_gap;
 
-	translate([0,0,-servo_holder_gap_bottom - servo_holder_wall_size_bottom - shaft_base2_extra_h - servo_arm_thickness])
+	translate([0,0,servo_arm_axis_to_base])
 	{
 		difference()
 		{
