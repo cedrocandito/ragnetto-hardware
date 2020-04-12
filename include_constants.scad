@@ -60,8 +60,8 @@ foot_tip_ball_d = min(foot_w, foot_h);
 foot_tip_ball_offset = foot_tip_ball_d * 0.2;
 foot_tip_hole_d = 5;
 foot_l = foot_tip_ball_d/2;
-lower_leg_beam_thickness = 5;
-lower_leg_side_space = 3;
+lower_leg_beam_thickness = 4;
+lower_leg_side_space = -2;
 
 lower_body_h = servo_holder_pillar_h + servo_holder_wall_size_bottom;
 body_r_axes = 80;
