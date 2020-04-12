@@ -10,6 +10,9 @@ servo_arm_extra_dist = servo_arm_extra_dist_min;
 servo_arm_axis_to_bracket = f_servo_arm_axis_to_bracket(servo_arm_extra_dist);
 lower_leg_w = servo_arm_h_in - lower_leg_side_space * 2;
 
+/* distance we must shift shift the foot to align it with the first leg segment */
+joint_2_forward_offset = -servo_holder_w / 2  - shaft_base2_extra_h + servo_arm_h_in/2;
+
 leg_l = leg_segment3_l - abs(servo_arm_axis_to_bracket);
 
 union()
@@ -32,7 +35,7 @@ union()
 module leg(w, l, h, bevel=bevel_r, foot_with_ball_tip = false)
 {
 	lb = l - foot_l - (foot_with_ball_tip ? foot_tip_ball_offset : 0);
-	foot_tip_pos = [0, -lb, -(h - foot_h)/2];
+	foot_tip_pos = [joint_2_forward_offset, -lb, -(h - foot_h)/2];
 	
 	union()
 	{
@@ -44,10 +47,10 @@ module leg(w, l, h, bevel=bevel_r, foot_with_ball_tip = false)
 				for (xs=[-1,1])
 				{
 					polygon([
-						[w/2 * xs, 0],
-						[foot_w/2 * xs, -lb],
-						[(foot_w/2 - lower_leg_beam_thickness) * xs, -lb],
-						[(w/2 - lower_leg_beam_thickness) * xs,0]
+						[w/2 * xs, servo_arm_bracket_size],
+						[foot_w/2 * xs + joint_2_forward_offset, -lb],
+						[(foot_w/2 - lower_leg_beam_thickness) * xs + joint_2_forward_offset, -lb],
+						[(w/2 - lower_leg_beam_thickness) * xs, servo_arm_bracket_size]
 					]);
 				}
 			}
