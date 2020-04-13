@@ -33,7 +33,7 @@ union()
 					{
 						servo_holder(with_bevel = true, bevel_left = false, bevel_bottom = false, draw_servo=true);
 						
-						// buttress
+						// buttresses
 						bevel_r =  min(servo_arm_bracket_size, servo_holder_h - servo_holder_w);
 						translate([
 							-servo_holder_w /2,
@@ -42,7 +42,8 @@ union()
 						])
 						{
 							$fs = bevel_fs;
-							davel_buttress_pos([0,servo_holder_l/2,0], servo_holder_l, [-1,0,0], [0,0,1],bevel_r);
+							davel_buttress_pos([0,servo_holder_pillar_l/2,0], servo_holder_pillar_l, [-1,0,0], [0,0,1],bevel_r);
+							davel_buttress_pos([0,servo_holder_l - servo_holder_pillar_l/2,0], servo_holder_pillar_l, [-1,0,0], [0,0,1],bevel_r);
 						}
 					}
 				}
