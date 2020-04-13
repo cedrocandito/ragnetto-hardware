@@ -7,7 +7,7 @@ servo_holder_gap_side= 0.4;
 servo_holder_wall_size_bottom = 3;
 servo_holder_wall_size_side = 1.5;
 servo_holder_hole_extra = 2;
-servo_holder_mount_hole_d = 2.1;
+servo_holder_mount_hole_d = 2.05;
 servo_holder_wall_h = servo_holder_pillar_h;
 servo_holder_cable_extra_room = 2.5;
 servo_holder_cable_extra_room_r = 10;
@@ -22,11 +22,11 @@ servo_arm_servo_shaft_ring_gap = 0.2;	// to allow better movement
 servo_arm_passage_angle = 90;
 servo_arm_passage_extra_w = 0.5; // 0 is exactly the size of the servo shaft
 servo_horn_rim = 0.2;	// gap between horn and joint arm
-servo_arm_extra_horn_depth = 0.3;
+servo_arm_extra_horn_depth = 0;
 servo_arm_horn_bridge_coverage = 1.5;
 servo_arm_horn_bridge_h = 1;
 servo_arm_buttress_r = min(4, servo_arm_extra_dist_min);
-servo_arm_horn_hole_depth = min(1.3, sg90_horn_h);
+servo_arm_horn_hole_depth = min(1.6, sg90_horn_h);
 
 joint_screw_hole_d = 2;
 joint_screw_hole_distance = 20;
@@ -143,3 +143,6 @@ body_screw_hole_x = body_screw_column_d / 2;
 assert(shaft_base1_l > shaft_base2_d);
 assert(shaft_base1_l < sg90_main_w);
 assert(lower_body_h - base_plate_h > body_cable_hole_d +1);
+
+echo(servo_arm_h_out=servo_arm_h_out);
+hminushole = servo_arm_h_out - servo_arm_horn_hole_depth;
