@@ -108,6 +108,13 @@ arduino_pillar_h = 12;
 arduino_pillar_d_top = 3.5;
 arduino_pillar_d_base = 8;
 
+sonar_mount_enabled = true;
+sonar_mount_screw_hole_gap = 3;
+sonar_mount_screw_hole_d = 3;
+sonar_mount_cable_hole_gap =15;
+sonar_mount_cable_hole_w = sg90_connector_w + 2;
+sonar_mount_cable_hole_h = sg90_connector_h + 2;
+
 bevel_r = 2;
 bevel_fs = 0.3;
 
@@ -136,6 +143,7 @@ body_r = body_r_axes - servo_holder_w / 2;
 body_servo_holder_buttress_h = (servo_holder_h - base_plate_h)/2;
 upper_body_h = total_body_h - lower_body_h;
 body_screw_hole_x = body_screw_column_d / 2;
+sonar_mount_screw_hole_distance = servo_holder_l + sonar_mount_screw_hole_gap * 2 + sonar_mount_screw_hole_d;
 
 
 // ---------------- assertions --------------------
@@ -143,6 +151,3 @@ body_screw_hole_x = body_screw_column_d / 2;
 assert(shaft_base1_l > shaft_base2_d);
 assert(shaft_base1_l < sg90_main_w);
 assert(lower_body_h - base_plate_h > body_cable_hole_d +1);
-
-echo(servo_arm_h_out=servo_arm_h_out);
-hminushole = servo_arm_h_out - servo_arm_horn_hole_depth;

@@ -414,6 +414,20 @@ module upper_body_shell()
 				}
 			}
 		}
+		
+		// sonar mount holes
+		if (sonar_mount_enabled)
+		{
+			translate([0, 0, lower_body_h + upper_body_h - body_shell_thickness - 0.02])
+			{
+				translate([0, -sonar_mount_screw_hole_distance/2, 0])
+					cylinder(d=sonar_mount_screw_hole_d, h=body_shell_thickness + 0.03);
+				translate([0, sonar_mount_screw_hole_distance/2, 0])
+					cylinder(d=sonar_mount_screw_hole_d, h=body_shell_thickness + 0.03);
+				translate([-sonar_mount_cable_hole_w/2,  -sonar_mount_screw_hole_distance/2 -sonar_mount_cable_hole_gap, 0])
+					cube([sonar_mount_cable_hole_w, sonar_mount_cable_hole_h, body_shell_thickness + 0.03]);
+			}
+		}
 	}
 }
 
